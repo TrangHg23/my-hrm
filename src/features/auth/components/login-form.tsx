@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Lock, Mail } from "lucide-react";
@@ -16,9 +15,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoginFormValues, loginSchema } from "@/features/auth/schema/auth";
+import { useLogin } from "../hooks/useLogin";
 
 export function LoginForm() {
-  const [loading, setLoading] = useState(false);
+  const { mutate, isPending } = useLogin();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -28,15 +28,11 @@ export function LoginForm() {
     },
   });
 
-  async function onSubmit(data: LoginFormValues) {
-    setLoading(true);
-    try {
-      console.log("Submit:", data);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    } finally {
-      setLoading(false);
-    }
-  }
+  const onSubmit = async (data: LoginFormValues) => {
+    mutate(data);
+  };
+
+  const isLoading = isPending || form.formState.isSubmitting;
 
   return (
     <Form {...form}>
@@ -99,10 +95,10 @@ export function LoginForm() {
 
         <Button
           type="submit"
-          disabled={loading}
+          disabled={isLoading}
           className="w-full h-11 font-bold bg-primary hover:bg-primary/90 shadow-md transition-all active:scale-[0.98] relative overflow-hidden"
         >
-          {loading ? (
+          {isLoading ? (
             <div className="flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />
               <span>Đang xử lý...</span>
