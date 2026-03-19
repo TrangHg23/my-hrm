@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HRM System | Management Portal",
+  title: "HRM Portal",
   description: "Hệ thống quản trị nhân sự chuyên nghiệp",
 };
 
