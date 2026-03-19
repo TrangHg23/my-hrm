@@ -29,12 +29,14 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuthStore } from "@/features/auth/stores/auth";
 import { useState } from "react";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 
 
 export function AdminSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const user = useAuthStore((state) => state.user);
+  const { mutate: handleLogout } = useLogout();
 
   const [activeItem, setActiveItem] = useState("employees");
 
@@ -155,7 +157,10 @@ export function AdminSidebar({
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer font-medium">
+                <DropdownMenuItem 
+                  className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer font-medium"
+                  onClick={() => handleLogout()}
+                >
                   <LogOut className="mr-2 size-4" />
                   Đăng xuất
                 </DropdownMenuItem>
