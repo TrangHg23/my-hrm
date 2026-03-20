@@ -163,7 +163,13 @@
     @apply font-sans;
     scroll-behavior: smooth;
   }
+  button {
+    @apply cursor-pointer;
+  }
 
+  button:disabled {
+    @apply cursor-not-allowed;
+  }
   ::-webkit-scrollbar {
     width: 5px;
   }
