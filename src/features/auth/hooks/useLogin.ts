@@ -4,6 +4,7 @@ import { useAuthStore } from "../stores/auth";
 import { LoginFormValues } from "@/features/auth/schema/auth";
 import { useRouter } from "next/navigation";
 import { UserRole } from "@/enums/user";
+import { toast } from "sonner";
 
 export const useLogin = () => {
   const login = useAuthStore((state) => state.login);
@@ -14,6 +15,7 @@ export const useLogin = () => {
       loginApi(email, password),
 
     onSuccess: (data) => {
+      toast.success("Đăng nhập thành công!");
       login(data.user, data.accessToken);
 
       const role = data.user.role;
@@ -24,5 +26,9 @@ export const useLogin = () => {
         router.replace("/employee");
       }
     },
+    
+    onError: () => {
+      toast.error("Có lỗi xảy ra khi đăng nhập!");
+    }
   });
 };

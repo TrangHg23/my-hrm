@@ -36,7 +36,7 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 mt-4">
         <FormField
           control={form.control}
           name="email"
@@ -69,7 +69,7 @@ export function LoginForm() {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem className="space-y-1">
+            <FormItem className="space-y-1 gap-0">
               <FormLabel className="text-sm font-medium ml-1 text-foreground/80">
                 Mật khẩu
               </FormLabel>
