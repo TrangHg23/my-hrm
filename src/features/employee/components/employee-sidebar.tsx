@@ -1,5 +1,7 @@
 import * as React from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import {
   LogOut,
   ChevronsUpDown,
@@ -28,7 +30,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuthStore } from "@/features/auth/stores/auth";
-import { useState } from "react";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 
 export function EmployeeSidebar({
@@ -36,8 +37,7 @@ export function EmployeeSidebar({
 }: React.ComponentProps<typeof Sidebar>) {
   const user = useAuthStore((state) => state.user);
   const { mutate: handleLogout } = useLogout();
-
-  const [activeItem, setActiveItem] = useState("attendance");
+  const pathname = usePathname();
 
   const getFallbackName = (name: string) => {
     if (!name) return "EM";
@@ -59,40 +59,43 @@ export function EmployeeSidebar({
 
       <SidebarContent className="px-2 mt-4">
         <SidebarMenu className="gap-2">
-          {employeeNavItems.map((item) => (
-            <SidebarMenuItem key={item.id}>
-              <SidebarMenuButton
-                asChild
-                tooltip={item.title}
-                isActive={activeItem === item.id} 
-                onClick={() => setActiveItem(item.id)}
-                className={`h-12 transition-all group ${
-                  activeItem === item.id
-                    ? "bg-sidebar-accent text-primary"
-                    : "hover:bg-sidebar-accent hover:text-primary"
-                }`}
-              >
-                <a href={item.url} className="flex items-center gap-4">
-                  <item.icon
-                    className={`size-5 shrink-0 transition-transform ${
-                      activeItem === item.id
-                        ? "scale-110"
-                        : "group-hover:scale-110"
-                    }`}
-                  />
-                  <span
-                    className={`font-medium group-data-[collapsible=icon]:hidden ${
-                      activeItem === item.id
-                        ? "text-primary"
-                        : "text-foreground group-hover:text-primary"
-                    }`}
-                  >
-                    {item.title}
-                  </span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {employeeNavItems.map((item) => {
+            const isActive = pathname.startsWith(item.url);
+            
+            return (
+              <SidebarMenuItem key={item.id}>
+                <SidebarMenuButton
+                  asChild
+                  tooltip={item.title}
+                  isActive={isActive} 
+                  className={`h-12 transition-all group ${
+                    isActive
+                      ? "bg-sidebar-accent text-primary"
+                      : "hover:bg-sidebar-accent hover:text-primary"
+                  }`}
+                >
+                  <Link href={item.url} className="flex items-center gap-4">
+                    <item.icon
+                      className={`size-5 shrink-0 transition-transform ${
+                        isActive
+                          ? "scale-110"
+                          : "group-hover:scale-110"
+                      }`}
+                    />
+                    <span
+                      className={`font-medium group-data-[collapsible=icon]:hidden ${
+                        isActive
+                          ? "text-primary"
+                          : "text-foreground group-hover:text-primary"
+                      }`}
+                    >
+                      {item.title}
+                    </span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
         </SidebarMenu>
       </SidebarContent>
 
