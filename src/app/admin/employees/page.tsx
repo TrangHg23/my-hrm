@@ -15,22 +15,12 @@ import {
 import { TablePagination } from "@/components/ui/table-pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { useGetEmployees } from "@/features/employee-management/hooks/use-get-employees";
+import { CreateEmployeeModal } from "@/features/employee-management/components/create-employee-modal";
 import { Loader2 } from "lucide-react";
 
 export default function EmployeeManagementPage() {
   const user = useAuthStore((state) => state.user);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -67,77 +57,7 @@ export default function EmployeeManagementPage() {
             />
           </div>
 
-          <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-            <DialogTrigger asChild>
-              <Button className="w-full sm:w-auto shrink-0 gap-1">
-                <Plus className="h-4 w-4" />
-                Thêm nhân viên
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-106.25">
-              <DialogHeader>
-                <DialogTitle>Tạo tài khoản nhân viên</DialogTitle>
-                <DialogDescription>
-                  Tài khoản này sẽ được dùng để nhân viên đăng nhập vào hệ
-                  thống.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Họ và tên <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="name"
-                    placeholder="Nguyễn Văn A"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="email" className="text-right">
-                    Email <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="nhanvien@company.com"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="password" className="text-right">
-                    Mật khẩu <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Tối thiểu 6 ký tự"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="phone" className="text-right whitespace-nowrap text-muted-foreground">
-                    Số điện thoại
-                  </Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="vd: 0987654321"
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => setIsAddModalOpen(false)}
-                >
-                  Hủy
-                </Button>
-                <Button type="submit">Lưu tài khoản</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <CreateEmployeeModal />
         </div>
       </div>
 
