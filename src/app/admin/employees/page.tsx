@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { formatDate } from "@/utils/date";
-import { Plus, Search, Eye, Edit } from "lucide-react";
+import { Search, Eye, Edit, Loader2 } from "lucide-react";
 import { useAuthStore } from "@/features/auth/stores/auth";
 
 import {
@@ -17,14 +17,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGetEmployees } from "@/features/employee-management/hooks/use-get-employees";
 import { CreateEmployeeModal } from "@/features/employee-management/components/create-employee-modal";
-import { Loader2 } from "lucide-react";
+import { EmployeeDetailModal } from "@/features/employee-management/components/employee-detail-modal";
 
 export default function EmployeeManagementPage() {
   const user = useAuthStore((state) => state.user);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const itemsPerPage = 10;
 
   const { data, isLoading } = useGetEmployees(currentPage, itemsPerPage);
+
+  const handleViewStatus = (id: string) => {
+    setSelectedEmployeeId(id);
+    setIsDetailModalOpen(true);
+  };
 
   const displayedEmployees = data?.data || [];
   const totalPages = data?.meta.totalPages || 1;
@@ -60,6 +67,12 @@ export default function EmployeeManagementPage() {
           <CreateEmployeeModal />
         </div>
       </div>
+
+      <EmployeeDetailModal
+        employeeId={selectedEmployeeId}
+        isOpen={isDetailModalOpen}
+        onOpenChange={setIsDetailModalOpen}
+      />
 
       {/* Table Section */}
       <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-160px)] min-h-125">
@@ -125,6 +138,7 @@ export default function EmployeeManagementPage() {
                           size="icon"
                           className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
                           title="Xem chi tiết"
+                          onClick={() => handleViewStatus(employee.id)}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
