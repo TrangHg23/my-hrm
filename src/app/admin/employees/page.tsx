@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { formatDate } from "@/utils/date";
-import { Search, Eye, Edit, Loader2 } from "lucide-react";
+import { Search, Eye, Edit, Loader2, Plus } from "lucide-react";
 import { useAuthStore } from "@/features/auth/stores/auth";
 
 import {
@@ -16,14 +16,26 @@ import { TablePagination } from "@/components/ui/table-pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGetEmployees } from "@/features/employee-management/hooks/use-get-employees";
-import { CreateEmployeeModal } from "@/features/employee-management/components/create-employee-modal";
+import { EmployeeFormModal } from "@/features/employee-management/components/employee-form-modal";
 import { EmployeeDetailModal } from "@/features/employee-management/components/employee-detail-modal";
+import { Employee } from "@/features/employee-management/types/employees";
 
 export default function EmployeeManagementPage() {
   const user = useAuthStore((state) => state.user);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
+  const [formModalState, setFormModalState] = useState<{
+    isOpen: boolean;
+    mode: "create" | "update";
+    employee: Employee | null;
+  }>({
+    isOpen: false,
+    mode: "create",
+    employee: null,
+  });
+
   const itemsPerPage = 10;
 
   const { data, isLoading } = useGetEmployees(currentPage, itemsPerPage);
@@ -31,6 +43,18 @@ export default function EmployeeManagementPage() {
   const handleViewStatus = (id: string) => {
     setSelectedEmployeeId(id);
     setIsDetailModalOpen(true);
+  };
+
+  const handleOpenCreate = () => {
+    setFormModalState({ isOpen: true, mode: "create", employee: null });
+  };
+
+  const handleOpenEdit = (employee: Employee) => {
+    setFormModalState({ isOpen: true, mode: "update", employee });
+  };
+
+  const handleFormModalOpenChange = (open: boolean) => {
+    setFormModalState((prev) => ({ ...prev, isOpen: open }));
   };
 
   const displayedEmployees = data?.data || [];
@@ -64,7 +88,10 @@ export default function EmployeeManagementPage() {
             />
           </div>
 
-          <CreateEmployeeModal onSuccess={() => setCurrentPage(1)} />
+          <Button className="w-full sm:w-auto shrink-0 gap-1" onClick={handleOpenCreate}>
+            <Plus className="h-4 w-4" />
+            Thêm nhân viên
+          </Button>
         </div>
       </div>
 
@@ -74,22 +101,32 @@ export default function EmployeeManagementPage() {
         onOpenChange={setIsDetailModalOpen}
       />
 
+      <EmployeeFormModal
+        mode={formModalState.mode}
+        employee={formModalState.employee}
+        isOpen={formModalState.isOpen}
+        onOpenChange={handleFormModalOpenChange}
+        onSuccess={() => {
+          if (formModalState.mode === "create") {
+            setCurrentPage(1);
+          }
+        }}
+      />
+
       {/* Table Section */}
       <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-160px)] min-h-125">
         {/* Table Wrapper for fixed height and scrolling */}
         <div className="flex-1 overflow-auto relative">
           <table className="w-full caption-bottom text-sm min-w-275 border-collapse">
-            <TableHeader className="bg-muted/95 backdrop-blur sticky top-0 z-20 shadow-sm">
-              <TableRow className="hover:bg-transparent">
-                <TableHead className="w-35">Mã nhân viên</TableHead>
-                <TableHead className="w-50">Họ và tên</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Số điện thoại</TableHead>
-                <TableHead>Ngày tạo</TableHead>
-                <TableHead>Người tạo</TableHead>
-                <TableHead className="text-right sticky right-0 bg-muted/95 backdrop-blur z-30 w-30 shadow-sm before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">
-                  Hành động
-                </TableHead>
+            <TableHeader className="bg-muted sticky top-0 z-20 border-b">
+              <TableRow className="hover:bg-transparent border-b">
+                <TableHead className="w-24 py-4 font-bold text-foreground">Mã nhân viên</TableHead>
+                <TableHead className="font-bold text-foreground">Họ và tên</TableHead>
+                <TableHead className="font-bold text-foreground">Email</TableHead>
+                <TableHead className="font-bold text-foreground">Số điện thoại</TableHead>
+                <TableHead className="font-bold text-foreground">Ngày tạo</TableHead>
+                <TableHead className="font-bold text-foreground">Người tạo</TableHead>
+                <TableHead className="text-right sticky right-0 bg-muted/95 backdrop-blur-sm z-20 w-32 font-bold before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">Hành động</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -147,6 +184,7 @@ export default function EmployeeManagementPage() {
                           size="icon"
                           className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
                           title="Cập nhật"
+                          onClick={() => handleOpenEdit(employee)}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>

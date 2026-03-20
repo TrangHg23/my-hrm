@@ -1,3 +1,6 @@
+import { createEmployeeSchema, updateEmployeeSchema } from "../schema/employee";
+import z from "zod";
+
 export interface Employee {
   id: string;
   email: string;
@@ -18,3 +21,7 @@ export interface GetEmployeesResponse {
     totalPages: number;
   };
 }
+
+export type CreateEmployeeFormValues = z.infer<typeof createEmployeeSchema>;
+export type UpdateEmployeeFormValues = z.infer<typeof updateEmployeeSchema>;
+export type EmployeeFormValues = CreateEmployeeFormValues | UpdateEmployeeFormValues;

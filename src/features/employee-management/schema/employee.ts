@@ -22,4 +22,10 @@ export const createEmployeeSchema = z.object({
     .or(z.literal(""))
 });
 
-export type CreateEmployeeFormValues = z.infer<typeof createEmployeeSchema>;
+export const updateEmployeeSchema = createEmployeeSchema.extend({
+  password: z
+    .string()
+    .min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự" })
+    .optional()
+    .or(z.literal("")),
+});
