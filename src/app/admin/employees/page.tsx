@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { format } from "date-fns";
+import { formatDate } from "@/utils/date";
 import { Plus, Search, Eye, Edit } from "lucide-react";
 import { useAuthStore } from "@/features/auth/stores/auth";
 
@@ -25,7 +25,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { mockEmployees } from "@/app/admin/employees/mockData";
+import { useGetEmployees } from "@/features/employee-management/hooks/use-get-employees";
+import { Loader2 } from "lucide-react";
 
 export default function AdminEmployeesPage() {
   const user = useAuthStore((state) => state.user);
@@ -33,11 +34,11 @@ export default function AdminEmployeesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const totalPages = Math.ceil(mockEmployees.length / itemsPerPage);
-  const displayedEmployees = mockEmployees.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
-  );
+  const { data, isLoading } = useGetEmployees(currentPage, itemsPerPage);
+
+  const displayedEmployees = data?.data || [];
+  const totalPages = data?.meta.totalPages || 1;
+  const totalItems = data?.meta.total || 0;
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto w-full">
@@ -135,51 +136,67 @@ export default function AdminEmployeesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {displayedEmployees.map((employee) => (
-                <TableRow
-                  key={employee.id}
-                  className="group hover:bg-muted/50 transition-colors"
-                >
-                  <TableCell className="font-medium text-muted-foreground uppercase text-xs">
-                    {employee.id.split("-")[0]}
-                  </TableCell>
-                  <TableCell className="font-semibold text-foreground">
-                    {employee.name}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {employee.email}
-                  </TableCell>
-                  <TableCell>{employee.phone || "---"}</TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {format(new Date(employee.createdAt), "dd/MM/yyyy")}
-                  </TableCell>
-                  <TableCell>
-                    <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-primary/10 text-primary border-primary/20">
-                      {user?.name || "Admin"}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-right sticky right-0 bg-background group-hover:bg-muted/50 transition-colors z-10 w-30 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">
-                    <div className="flex items-center justify-end gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
-                        title="Xem chi tiết"
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
-                        title="Cập nhật"
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="h-24 text-center">
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                     </div>
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : displayedEmployees.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
+                    Không tìm thấy nhân viên nào.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                displayedEmployees.map((employee: any) => (
+                  <TableRow
+                    key={employee.id}
+                    className="group hover:bg-muted/50 transition-colors"
+                  >
+                    <TableCell className="font-medium text-muted-foreground uppercase text-xs">
+                      {employee.id.split("-")[0]}
+                    </TableCell>
+                    <TableCell className="font-semibold text-foreground">
+                      {employee.name}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {employee.email}
+                    </TableCell>
+                    <TableCell>{employee.phone || "---"}</TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {formatDate(employee.createdAt)}
+                    </TableCell>
+                    <TableCell>
+                      <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-primary/10 text-primary border-primary/20">
+                        {user?.name || "Admin"}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right sticky right-0 bg-background group-hover:bg-muted/50 transition-colors z-10 w-30 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">
+                      <div className="flex items-center justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
+                          title="Xem chi tiết"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
+                          title="Cập nhật"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </table>
         </div>
@@ -188,7 +205,7 @@ export default function AdminEmployeesPage() {
         <TablePagination
           currentPage={currentPage}
           totalPages={totalPages}
-          totalItems={mockEmployees.length}
+          totalItems={totalItems}
           itemsPerPage={itemsPerPage}
           onPageChange={setCurrentPage}
         />
