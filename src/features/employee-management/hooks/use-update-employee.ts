@@ -1,10 +1,10 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { updateEmployee } from "../api/update-employee";
 import { CreateEmployeeFormValues } from "../types/employees";
+import { queryClient } from "@/lib/query-client";
 
 export const useUpdateEmployee = (onSuccessCallback?: () => void) => {
-  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<CreateEmployeeFormValues> }) => updateEmployee(id, data),

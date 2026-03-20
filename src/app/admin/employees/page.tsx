@@ -20,42 +20,22 @@ import { EmployeeFormModal } from "@/features/employee-management/components/emp
 import { EmployeeDetailModal } from "@/features/employee-management/components/employee-detail-modal";
 import { Employee } from "@/features/employee-management/types/employees";
 
+import { useEmployeeModalStore } from "@/features/employee-management/stores/employee-modal";
+
 export default function EmployeeManagementPage() {
   const user = useAuthStore((state) => state.user);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(null);
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-
-  const [formModalState, setFormModalState] = useState<{
-    isOpen: boolean;
-    mode: "create" | "update";
-    employee: Employee | null;
-  }>({
-    isOpen: false,
-    mode: "create",
-    employee: null,
-  });
+  
+  const { 
+    openCreateForm, 
+    openUpdateForm, 
+    openDetail,
+    formMode 
+  } = useEmployeeModalStore();
 
   const itemsPerPage = 10;
 
   const { data, isLoading } = useGetEmployees(currentPage, itemsPerPage);
-
-  const handleViewStatus = (id: string) => {
-    setSelectedEmployeeId(id);
-    setIsDetailModalOpen(true);
-  };
-
-  const handleOpenCreate = () => {
-    setFormModalState({ isOpen: true, mode: "create", employee: null });
-  };
-
-  const handleOpenEdit = (employee: Employee) => {
-    setFormModalState({ isOpen: true, mode: "update", employee });
-  };
-
-  const handleFormModalOpenChange = (open: boolean) => {
-    setFormModalState((prev) => ({ ...prev, isOpen: open }));
-  };
 
   const displayedEmployees = data?.data || [];
   const totalPages = data?.meta.totalPages || 1;
@@ -88,26 +68,18 @@ export default function EmployeeManagementPage() {
             />
           </div>
 
-          <Button className="w-full sm:w-auto shrink-0 gap-1" onClick={handleOpenCreate}>
+          <Button className="w-full sm:w-auto shrink-0 gap-1" onClick={openCreateForm}>
             <Plus className="h-4 w-4" />
             Thêm nhân viên
           </Button>
         </div>
       </div>
 
-      <EmployeeDetailModal
-        employeeId={selectedEmployeeId}
-        isOpen={isDetailModalOpen}
-        onOpenChange={setIsDetailModalOpen}
-      />
+      <EmployeeDetailModal />
 
       <EmployeeFormModal
-        mode={formModalState.mode}
-        employee={formModalState.employee}
-        isOpen={formModalState.isOpen}
-        onOpenChange={handleFormModalOpenChange}
         onSuccess={() => {
-          if (formModalState.mode === "create") {
+          if (formMode === "create") {
             setCurrentPage(1);
           }
         }}
@@ -175,7 +147,7 @@ export default function EmployeeManagementPage() {
                           size="icon"
                           className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
                           title="Xem chi tiết"
-                          onClick={() => handleViewStatus(employee.id)}
+                          onClick={() => openDetail(employee.id)}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -184,7 +156,7 @@ export default function EmployeeManagementPage() {
                           size="icon"
                           className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
                           title="Cập nhật"
-                          onClick={() => handleOpenEdit(employee)}
+                          onClick={() => openUpdateForm(employee)}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>

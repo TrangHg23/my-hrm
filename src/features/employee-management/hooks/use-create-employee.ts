@@ -1,9 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { createEmployee } from "../api/create-employee";
 import { toast } from "sonner";
+import { queryClient } from "@/lib/query-client";
 
 export const useCreateEmployee = (onSuccess?: () => void) => {
-  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: createEmployee,

@@ -22,21 +22,19 @@ import { useDetailEmployee } from "../hooks/use-detail-employee";
 import { formatDate } from "@/utils/date";
 import { Separator } from "@/components/ui/separator";
 
-interface EmployeeDetailModalProps {
-  employeeId: string | null;
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-}
+import { useEmployeeModalStore } from "../stores/employee-modal";
 
-export function EmployeeDetailModal({
-  employeeId,
-  isOpen,
-  onOpenChange,
-}: EmployeeDetailModalProps) {
+export function EmployeeDetailModal() {
+  const { 
+    isDetailOpen: isOpen, 
+    selectedEmployeeId: employeeId, 
+    closeDetail: onOpenChange 
+  } = useEmployeeModalStore();
+
   const { data: employee, isLoading } = useDetailEmployee(employeeId || "", isOpen);
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onOpenChange()}>
       <DialogContent showCloseButton={false} className="sm:max-w-125 p-0 overflow-hidden border-none shadow-2xl">
         {/* Header với Background Gradient từ Theme */}
         <div className="h-32 bg-primary-gradient relative">

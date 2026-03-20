@@ -23,21 +23,20 @@ import {
 } from "../schema/employee";
 import { Employee, CreateEmployeeFormValues, EmployeeFormValues } from "../types/employees";
 
-interface EmployeeFormModalProps {
-  mode: "create" | "update";
-  employee: Employee | null;
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSuccess?: () => void;
-}
+import { useEmployeeModalStore } from "../stores/employee-modal";
 
 export function EmployeeFormModal({
-  mode,
-  employee,
-  isOpen,
-  onOpenChange,
   onSuccess,
-}: EmployeeFormModalProps) {
+}: {
+  onSuccess?: () => void;
+}) {
+  const { 
+    isFormOpen: isOpen, 
+    formMode: mode, 
+    selectedEmployee: employee, 
+    closeForm: onOpenChange 
+  } = useEmployeeModalStore();
+
   const isUpdate = mode === "update";
   const schema = isUpdate ? updateEmployeeSchema : createEmployeeSchema;
 
@@ -77,7 +76,7 @@ export function EmployeeFormModal({
   }, [isOpen, isUpdate, employee, reset]);
 
   const handleClose = () => {
-    onOpenChange(false);
+    onOpenChange();
     reset();
   };
 
@@ -105,7 +104,7 @@ export function EmployeeFormModal({
   const isPending = isCreating || isUpdating;
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onOpenChange()}>
       <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
           <DialogTitle className="text-2xl text-center">
