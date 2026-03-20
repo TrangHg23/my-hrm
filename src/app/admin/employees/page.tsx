@@ -28,7 +28,7 @@ import { Label } from "@/components/ui/label";
 import { useGetEmployees } from "@/features/employee-management/hooks/use-get-employees";
 import { Loader2 } from "lucide-react";
 
-export default function AdminEmployeesPage() {
+export default function EmployeeManagementPage() {
   const user = useAuthStore((state) => state.user);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,19 +43,22 @@ export default function AdminEmployeesPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto w-full">
       {/* Header section with Greeting */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-primary">
-            Chào buổi sáng, {user?.name || "Admin"} 👋
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-primary flex items-center gap-2 flex-wrap">
+            Chào buổi sáng, {user?.name || "Admin"}
+            <span className="text-2xl origin-bottom-right rotate-12 animate-wave inline-block shrink-0">
+              👋
+            </span>
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-1 text-sm md:text-base">
             Dưới đây là danh sách nhân viên hiện tại của công ty.
           </p>
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-2">
-          <div className="relative w-full md:w-64">
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto mt-4 lg:mt-0 shrink-0">
+          <div className="relative w-full sm:w-64">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
@@ -66,7 +69,7 @@ export default function AdminEmployeesPage() {
 
           <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
             <DialogTrigger asChild>
-              <Button className="shrink-0 gap-1">
+              <Button className="w-full sm:w-auto shrink-0 gap-1">
                 <Plus className="h-4 w-4" />
                 Thêm nhân viên
               </Button>
@@ -81,8 +84,18 @@ export default function AdminEmployeesPage() {
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Họ và tên <span className="text-destructive">*</span>
+                  </Label>
+                  <Input
+                    id="name"
+                    placeholder="Nguyễn Văn A"
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="email" className="text-right">
-                    Email
+                    Email <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="email"
@@ -93,12 +106,23 @@ export default function AdminEmployeesPage() {
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="password" className="text-right">
-                    Mật khẩu
+                    Mật khẩu <span className="text-destructive">*</span>
                   </Label>
                   <Input
                     id="password"
                     type="password"
                     placeholder="Tối thiểu 6 ký tự"
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="phone" className="text-right whitespace-nowrap text-muted-foreground">
+                    Số điện thoại
+                  </Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="vd: 0987654321"
                     className="col-span-3"
                   />
                 </div>
@@ -118,7 +142,7 @@ export default function AdminEmployeesPage() {
       </div>
 
       {/* Table Section */}
-      <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col h-[calc(100vh-160px)] min-h-125">
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-160px)] min-h-125">
         {/* Table Wrapper for fixed height and scrolling */}
         <div className="flex-1 overflow-auto relative">
           <table className="w-full caption-bottom text-sm min-w-275 border-collapse">
@@ -154,7 +178,7 @@ export default function AdminEmployeesPage() {
                 displayedEmployees.map((employee: any) => (
                   <TableRow
                     key={employee.id}
-                    className="group hover:bg-muted/50 transition-colors"
+                    className="group hover:bg-muted transition-colors"
                   >
                     <TableCell className="font-medium text-muted-foreground uppercase text-xs">
                       {employee.id.split("-")[0]}
@@ -174,7 +198,7 @@ export default function AdminEmployeesPage() {
                         {user?.name || "Admin"}
                       </span>
                     </TableCell>
-                    <TableCell className="text-right sticky right-0 bg-background group-hover:bg-muted/50 transition-colors z-10 w-30 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">
+                    <TableCell className="text-right sticky right-0 bg-background group-hover:bg-muted transition-colors z-10 w-30 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">
                       <div className="flex items-center justify-end gap-1">
                         <Button
                           variant="ghost"

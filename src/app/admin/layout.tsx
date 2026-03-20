@@ -42,7 +42,7 @@ export default function AdminLayout({
       <div className="flex min-h-screen w-full">
         <AdminSidebar />
 
-        <main className="flex-1 w-full flex flex-col">
+        <main className="flex-1 flex flex-col min-w-0">
           <div className="flex w-full h-16 items-center justify-between border-b px-4 md:hidden">
             <div className="flex items-center gap-2">
               <div className="size-8 flex items-center justify-center shrink-0">

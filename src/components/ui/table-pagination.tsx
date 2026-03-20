@@ -5,6 +5,7 @@ import {
   PaginationNext,
   PaginationPrevious,
   PaginationLink,
+  PaginationEllipsis,
 } from "@/components/ui/pagination";
 
 interface TablePaginationProps {
@@ -27,11 +28,49 @@ export function TablePagination({
     onPageChange(page);
   };
 
+  const renderPaginationItems = () => {
+    const items = [];
+    
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) items.push(i);
+    } else {
+      if (currentPage <= 3) {
+        items.push(1, 2, 3, "ellipsis", totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        items.push(1, "ellipsis", totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        items.push(1, "ellipsis", currentPage, "ellipsis", totalPages);
+      }
+    }
+
+    return items.map((page, index) => {
+      if (page === "ellipsis") {
+        return (
+          <PaginationItem key={`ellipsis-${index}`}>
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+
+      return (
+        <PaginationItem key={page}>
+          <PaginationLink
+            href="#"
+            isActive={currentPage === page}
+            onClick={(e) => handlePageChange(e, page as number)}
+          >
+            {page}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    });
+  };
+
   if (totalItems === 0) return null;
 
   return (
-    <div className="flex items-center justify-between px-4 py-4 border-t bg-card relative z-30 shrink-0">
-      <div className="text-sm text-muted-foreground">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-4 border-t bg-card relative z-30 shrink-0">
+      <div className="text-sm text-muted-foreground text-center sm:text-left">
         Hiển thị{" "}
         <strong>
           {(currentPage - 1) * itemsPerPage + 1}-
@@ -56,17 +95,7 @@ export function TablePagination({
               />
             </PaginationItem>
 
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <PaginationItem key={page}>
-                <PaginationLink
-                  href="#"
-                  isActive={currentPage === page}
-                  onClick={(e) => handlePageChange(e, page)}
-                >
-                  {page}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
+            {renderPaginationItems()}
 
             <PaginationItem>
               <PaginationNext
