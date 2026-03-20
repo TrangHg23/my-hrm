@@ -64,7 +64,7 @@ export default function EmployeeManagementPage() {
             />
           </div>
 
-          <CreateEmployeeModal />
+          <CreateEmployeeModal onSuccess={() => setCurrentPage(1)} />
         </div>
       </div>
 

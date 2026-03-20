@@ -18,8 +18,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateEmployee } from "../hooks/use-create-employee";
 import { createEmployeeSchema, CreateEmployeeFormValues } from "../schema/employee";
+interface CreateEmployeeModalProps {
+  onSuccess?: () => void;
+}
 
-export function CreateEmployeeModal() {
+export function CreateEmployeeModal({ onSuccess }: CreateEmployeeModalProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const {
@@ -40,6 +43,7 @@ export function CreateEmployeeModal() {
   const { mutate: createMutation, isPending: isCreating } = useCreateEmployee(() => {
     setIsOpen(false);
     reset();
+    if (onSuccess) onSuccess();
   });
 
   const onSubmit = (values: CreateEmployeeFormValues) => {
