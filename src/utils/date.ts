@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { vi } from "date-fns/locale";
 
 export const formatDate = (
   date: string | Date | undefined | null,
@@ -12,4 +13,9 @@ export const formatDate = (
     console.error("Lỗi format ngày:", error);
     return "---";
   }
+};
+
+export const formatVietnameseDate = (date: Date): string => {
+  const formattedDate = format(date, "EEEE, 'ngày' d/M/yy", { locale: vi });
+  return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
 };
