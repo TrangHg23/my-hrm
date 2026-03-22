@@ -43,8 +43,8 @@ export function AdminAttendanceDashboard() {
   }, [allData, currentPage, itemsPerPage]);
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto w-full animate-in fade-in duration-500">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <div className="flex flex-col gap-6 w-full animate-in fade-in duration-500 overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 px-1">
         <GreetingHeader
           name={user?.name}
           fallbackName="Admin"
@@ -52,14 +52,16 @@ export function AdminAttendanceDashboard() {
         />
 
         {/* Filters and Actions */}
-        <div className="flex items-center w-full lg:w-auto mt-4 lg:mt-0 shrink-0">
-          <div className="relative w-full sm:w-64">
-            <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+        <div className="flex items-center w-full md:w-auto shrink-0">
+          <div className="relative w-full sm:w-56">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground pointer-events-none uppercase">
+              Ngày:
+            </span>
             <Input
               type="date"
               value={selectedDate}
               onChange={handleDateChange}
-              className="w-full pl-10 bg-background h-10 border-muted-foreground/20 focus:border-primary font-medium"
+              className="w-full pl-16 bg-background h-10 border-muted-foreground/20 focus:border-primary font-bold transition-all hover:border-primary/50"
             />
           </div>
         </div>

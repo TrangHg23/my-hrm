@@ -16,6 +16,7 @@ import {
 } from "../utils/attendance";
 import { AttendanceSessionItem } from "./attendance-session-item";
 import { AttendanceStatusBadge } from "./attendance-status-badge";
+import { AttendanceTotalTime } from "./attendance-total-time";
 
 interface AttendanceTableProps {
   data: AttendanceRecord[];
@@ -33,12 +34,12 @@ export function AttendanceTable({ data }: AttendanceTableProps) {
         </h2>
       </div>
 
-      <div className="rounded-xl border border-border bg-card shadow-md overflow-hidden flex flex-col h-175">
+      <div className="rounded-xl border border-border bg-card shadow-md overflow-hidden flex flex-col h-175 w-full max-w-full">
         <div className="flex-1 overflow-auto custom-scrollbar text-[13px]">
           <table className="w-full border-collapse min-w-[950px]">
             <TableHeader className="bg-muted/50 sticky top-0 z-20 backdrop-blur-md border-b-2">
               <TableRow className="hover:bg-transparent uppercase text-[11px] tracking-wider">
-                <TableHead className="w-28 font-bold text-foreground py-4 text-center sticky left-0 bg-muted z-30 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
+                <TableHead className="w-28 font-bold text-foreground py-4 text-center sticky left-0 bg-muted z-20 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
                   Ngày
                 </TableHead>
                 <TableHead className="w-20 font-bold text-foreground py-4 px-2 text-center">
@@ -74,13 +75,13 @@ export function AttendanceTable({ data }: AttendanceTableProps) {
               ) : (
                 weeks.map((weekData, weekIndex) => (
                   <React.Fragment key={weekIndex}>
-                    <TableRow className="bg-muted/40 hover:bg-muted/40 border-y border-border/60">
+                    <TableRow className="bg-muted/60 hover:bg-muted/70 border-y border-border/60">
                       <TableCell
-                        colSpan={7}
-                        className="py-2.5 px-6 font-bold text-primary/80 uppercase tracking-wider text-[11px]"
+                        className="py-2.5 px-6 font-bold text-primary uppercase tracking-wider text-[11px] sticky left-0 z-10 bg-muted/95 backdrop-blur-sm w-28 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border/50 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]"
                       >
                         TUẦN {weeks.length - weekIndex}
                       </TableCell>
+                      <TableCell colSpan={6} className="bg-muted/60"></TableCell>
                     </TableRow>
                     {weekData.map((row) => {
                       const dayInfo = getDayOfWeek(row.date);
@@ -97,8 +98,10 @@ export function AttendanceTable({ data }: AttendanceTableProps) {
                           )}
                         >
                           <TableCell className={cn(
-                            "font-bold text-foreground py-4 text-center border-r border-border/30 tabular-nums sticky left-0 bg-card group-hover:bg-muted transition-colors z-10 w-28 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]",
-                            isSunday && "bg-destructive/10 group-hover:bg-destructive/10"
+                            "font-bold text-foreground py-4 text-center border-r border-border/30 tabular-nums sticky left-0 group-hover:bg-muted transition-colors z-10 w-28 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]",
+                            isSunday 
+                              ? "text-destructive bg-[#fff5f5] group-hover:bg-[#ffebeb] after:absolute after:inset-0 after:bg-[#fff5f5] after:-z-10" 
+                              : "text-foreground/70 bg-card group-hover:bg-muted"
                           )}>
                             {row.date}
                           </TableCell>
@@ -139,9 +142,7 @@ export function AttendanceTable({ data }: AttendanceTableProps) {
                           </TableCell>
 
                           <TableCell className="py-4 text-center">
-                            <span className="font-bold text-primary bg-primary/5 px-3 py-1.5 rounded-md border border-primary/10">
-                              {formatWorkHours(row.workHours)}
-                            </span>
+                            <AttendanceTotalTime hours={formatWorkHours(row.workHours)} />
                           </TableCell>
 
                           <TableCell className="py-4 px-2 text-center">

@@ -133,70 +133,79 @@ export function AttendanceDashboard() {
 
       {/* Monthly Summary */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <h3 className="text-lg font-bold flex items-center gap-2">
             Tổng quan
           </h3>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-muted/50 p-1.5 rounded-lg border border-border/50">
             <label
               htmlFor="month-select"
-              className="text-sm font-medium text-muted-foreground whitespace-nowrap"
+              className="text-xs font-semibold text-muted-foreground/80 whitespace-nowrap px-1"
             >
-              Chọn tháng:
+              THÁNG:
             </label>
             <select
               id="month-select"
               value={selectValue}
               onChange={handleMonthChange}
-              className="flex h-9 min-w-30 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer"
+              className="flex h-8 min-w-32 rounded-md border-none bg-transparent px-2 py-0 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-0 cursor-pointer"
             >
               {availableMonths.map(({ month, year }) => (
                 <option key={`${month}-${year}`} value={`${month}-${year}`}>
-                  Tháng {month}/{year}
+                  {month}/{year}
                 </option>
               ))}
             </select>
           </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             {
               label: "Tổng giờ làm",
               value: summary.totalHours,
               icon: Clock3,
               color: "text-blue-500",
+              bgColor: "bg-blue-50",
             },
             {
               label: "Đi làm",
               value: summary.presentDays,
               icon: CheckCircle2,
               color: "text-green-500",
+              bgColor: "bg-green-50",
             },
             {
               label: "Nghỉ phép",
               value: summary.leaveDays,
               icon: History,
               color: "text-orange-500",
+              bgColor: "bg-orange-50",
             },
             {
               label: "Vắng mặt",
               value: summary.absentDays,
               icon: AlertCircle,
               color: "text-red-500",
+              bgColor: "bg-red-50",
             },
           ].map((item, i) => (
             <div
               key={i}
-              className="bg-card p-4 rounded-xl border shadow-sm flex flex-col gap-2 hover:border-primary/50 transition-colors group"
+              className="bg-card p-5 rounded-xl border shadow-sm flex flex-col gap-3 hover:border-primary/50 transition-all hover:shadow-md group relative overflow-hidden"
             >
-              <item.icon className={cn("size-5", item.color)} />
+              <div className={cn("size-10 rounded-lg flex items-center justify-center shrink-0", item.bgColor)}>
+                <item.icon className={cn("size-5", item.color)} />
+              </div>
               <div className="flex flex-col">
-                <span className="text-2xl font-bold tracking-tight">
+                <span className="text-2xl font-black tracking-tight text-foreground">
                   {item.value}
                 </span>
-                <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
+                <span className="text-[11px] text-muted-foreground font-bold uppercase tracking-widest mt-0.5">
                   {item.label}
                 </span>
+              </div>
+              <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-10 transition-opacity">
+                <item.icon className="size-12" />
               </div>
             </div>
           ))}

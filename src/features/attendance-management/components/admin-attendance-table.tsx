@@ -13,6 +13,7 @@ import { Loader2 } from "lucide-react";
 import { getStatusConfig } from "../utils/attendance";
 import { AttendanceSessionItem } from "@/features/attendance/components/attendance-session-item";
 import { AttendanceStatusBadge } from "@/features/attendance/components/attendance-status-badge";
+import { AttendanceTotalTime } from "@/features/attendance/components/attendance-total-time";
 
 type AdminAttendanceTableProps = {
   data: AdminAttendanceRecord[];
@@ -35,12 +36,12 @@ export function AdminAttendanceTable({
 }: AdminAttendanceTableProps) {
 
   return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-220px)] min-h-[500px]">
+    <div className="rounded-xl border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-180px)] min-h-[450px] w-full max-w-full">
       <div className="flex-1 overflow-auto relative custom-scrollbar">
         <table className="w-full caption-bottom text-sm min-w-[1050px] border-collapse">
           <TableHeader className="bg-muted sticky top-0 z-20 border-b">
             <TableRow className="hover:bg-transparent border-b">
-              <TableHead className="w-[100px] py-4 font-bold text-foreground sticky left-0 bg-muted z-30 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Mã NV</TableHead>
+              <TableHead className="w-[100px] py-4 font-bold text-foreground sticky left-0 bg-muted z-20 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Mã NV</TableHead>
               <TableHead className="w-[150px] font-bold text-foreground">Nhân viên</TableHead>
               <TableHead className="w-[120px] font-bold text-foreground text-center">Số ca</TableHead>
               <TableHead className="w-[300px] font-bold text-foreground text-center">Chi tiết các ca làm việc</TableHead>
@@ -105,9 +106,7 @@ export function AdminAttendanceTable({
                       </div>
                     </TableCell>
                     <TableCell className="py-4 text-center">
-                      <span className="font-bold text-primary bg-primary/5 px-3 py-1.5 rounded-md border border-primary/10">
-                        {record.totalHours !== "0h" ? record.totalHours : "---"}
-                      </span>
+                      <AttendanceTotalTime hours={record.totalHours} variant="compact" />
                     </TableCell>
                     <TableCell className="text-center w-32 py-4">
                       <div className="flex justify-center px-2">
