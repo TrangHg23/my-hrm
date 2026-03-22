@@ -36,15 +36,15 @@ export function AdminAttendanceTable({
 
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-220px)] min-h-[500px]">
-      <div className="flex-1 overflow-auto relative">
-        <table className="w-full caption-bottom text-sm min-w-[800px] border-collapse">
+      <div className="flex-1 overflow-auto relative custom-scrollbar">
+        <table className="w-full caption-bottom text-sm min-w-[1050px] border-collapse">
           <TableHeader className="bg-muted sticky top-0 z-20 border-b">
             <TableRow className="hover:bg-transparent border-b">
-              <TableHead className="w-[120px] py-4 font-bold text-foreground">Mã nhân viên</TableHead>
-              <TableHead className="w-[220px] font-bold text-foreground">Nhân viên</TableHead>
-              <TableHead className="w-[160px] font-bold text-foreground text-center">Tổng số ca làm việc</TableHead>
-              <TableHead className="w-[350px] font-bold text-foreground text-center">Chi tiết các ca làm việc</TableHead>
-              <TableHead className="w-[180px] font-bold text-foreground text-center whitespace-nowrap">Tổng thời gian làm việc</TableHead>
+              <TableHead className="w-[100px] py-4 font-bold text-foreground sticky left-0 bg-muted z-30 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Mã NV</TableHead>
+              <TableHead className="w-[150px] font-bold text-foreground">Nhân viên</TableHead>
+              <TableHead className="w-[120px] font-bold text-foreground text-center">Số ca</TableHead>
+              <TableHead className="w-[300px] font-bold text-foreground text-center">Chi tiết các ca làm việc</TableHead>
+              <TableHead className="w-[150px] font-bold text-foreground text-center whitespace-nowrap">Tổng thời gian làm việc</TableHead>
               <TableHead className="w-[140px] text-center font-bold text-foreground py-4">
                 Trạng thái
               </TableHead>
@@ -73,7 +73,7 @@ export function AdminAttendanceTable({
                     key={record.id}
                     className="group hover:bg-muted/50 transition-colors"
                   >
-                    <TableCell className="font-medium text-muted-foreground uppercase text-xs">
+                    <TableCell className="font-medium text-muted-foreground uppercase text-xs sticky left-0 bg-card group-hover:bg-muted transition-colors z-10 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
                       {record.employeeId}
                     </TableCell>
                     <TableCell>
@@ -88,7 +88,7 @@ export function AdminAttendanceTable({
                       </span>
                     </TableCell>
                     <TableCell className="py-3 px-4">
-                      <div className="grid grid-cols-2 gap-2 max-w-[320px] mx-auto">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 max-w-[420px] mx-auto">
                         {record.sessions.length > 0 ? (
                           record.sessions.map((s: AdminWorkSession, idx: number) => (
                             <AttendanceSessionItem
