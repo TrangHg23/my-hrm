@@ -1,4 +1,4 @@
-import { AttendanceRecord } from "../components/mock-data";
+import { AttendanceRecord } from "../types/attendance";
 
 export const getDayOfWeek = (dateStr: string) => {
   const [day, month] = dateStr.split('/').map(Number);

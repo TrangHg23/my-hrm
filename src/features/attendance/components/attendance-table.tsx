@@ -1,5 +1,4 @@
-import React from "react";
-import { Badge } from "@/components/ui/badge";
+import React, { useMemo } from "react";
 import {
   TableBody,
   TableCell,
@@ -8,20 +7,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { AttendanceRecord } from "./mock-data";
-import { ArrowRight, Clock3 } from "lucide-react";
+import { AttendanceRecord, WorkSession } from "../types/attendance";
+import { Clock3 } from "lucide-react";
 import {
   getDayOfWeek,
   formatWorkHours,
   groupDataByWeek,
 } from "../utils/attendance";
+import { AttendanceSessionItem } from "./attendance-session-item";
+import { AttendanceStatusBadge } from "./attendance-status-badge";
 
 interface AttendanceTableProps {
   data: AttendanceRecord[];
 }
 
 export function AttendanceTable({ data }: AttendanceTableProps) {
-  const weeks = React.useMemo(() => groupDataByWeek(data), [data]);
+  const weeks = useMemo(() => groupDataByWeek(data), [data]);
 
   return (
     <div className="space-y-4 pt-4">
@@ -119,26 +120,12 @@ export function AttendanceTable({ data }: AttendanceTableProps) {
                           <TableCell className="py-3 px-4">
                             <div className="grid grid-cols-2 gap-2 max-w-85 mx-auto">
                               {row.sessions.length > 0 ? (
-                                row.sessions.map((s, idx) => (
-                                  <div
+                                row.sessions.map((s: WorkSession, idx: number) => (
+                                  <AttendanceSessionItem
                                     key={idx}
-                                    className="flex items-center gap-2 bg-background border border-border rounded-md px-2 py-1.5 shadow-sm justify-center group-hover:border-primary/30 transition-colors"
-                                  >
-                                    <span className="text-primary font-bold tabular-nums text-[12px]">
-                                      {s.in}
-                                    </span>
-                                    <ArrowRight className="w-3 h-3 text-muted-foreground/40" />
-                                    <span
-                                      className={cn(
-                                        "font-bold tabular-nums text-[12px]",
-                                        s.out
-                                          ? "text-primary"
-                                          : "text-warning animate-pulse font-extrabold",
-                                      )}
-                                    >
-                                      {s.out || "CHỜ RA"}
-                                    </span>
-                                  </div>
+                                    inTime={s.in}
+                                    outTime={s.out}
+                                  />
                                 ))
                               ) : (
                                 <div className="col-span-2 text-center py-1.5 text-muted-foreground/40 font-bold text-[10px] tracking-widest italic border border-dashed rounded-md">
@@ -155,20 +142,10 @@ export function AttendanceTable({ data }: AttendanceTableProps) {
                           </TableCell>
 
                           <TableCell className="py-4 px-2 text-center">
-                            <Badge
-                              className={cn(
-                                "font-bold shadow-none text-[10px] px-2.5 py-0.5 border-none",
-                                row.type === "success"
-                                  ? "bg-green-500/10 text-green-600"
-                                  : row.type === "warning"
-                                    ? "bg-orange-500/10 text-orange-600"
-                                    : row.type === "danger"
-                                      ? "bg-red-500/10 text-red-600"
-                                      : "bg-muted text-muted-foreground",
-                              )}
-                            >
-                              {row.status}
-                            </Badge>
+                            <AttendanceStatusBadge 
+                              status={row.type} 
+                              label={row.status} 
+                            />
                           </TableCell>
 
                           <TableCell

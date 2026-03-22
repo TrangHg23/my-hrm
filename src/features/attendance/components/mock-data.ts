@@ -1,16 +1,4 @@
-export interface WorkSession {
-  in: string;
-  out: string | null;
-}
-
-export interface AttendanceRecord {
-  date: string;
-  sessions: WorkSession[];
-  workHours: string;
-  status: string;
-  note: string;
-  type: "success" | "warning" | "danger" | "secondary";
-}
+import { AttendanceRecord, WorkSession } from "../types/attendance";
 
 export function generateAttendanceData(year: number, month: number): AttendanceRecord[] {
   const data: AttendanceRecord[] = [];
@@ -36,7 +24,6 @@ export function generateAttendanceData(year: number, month: number): AttendanceR
     const dayOfWeek = dateObj.getDay();
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
     
-    // Always render today's status even if it's a weekend
     if (isToday) {
       data.push({
         date: `${i}/${month}`,
