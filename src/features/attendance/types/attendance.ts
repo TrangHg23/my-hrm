@@ -37,7 +37,9 @@ export const mapAttendance = (data: CheckInCheckOutApiResponse): Attendance => {
   return {
     isCheckIn,
     checkinTime: isCheckIn ? new Date(data.session.checkinTime) : null,
-    checkoutTime: data.session.checkoutTime ? new Date(data.session.checkoutTime) : null,
+    checkoutTime: data.session.checkoutTime
+      ? new Date(data.session.checkoutTime)
+      : null,
     message: data.message,
   };
 };

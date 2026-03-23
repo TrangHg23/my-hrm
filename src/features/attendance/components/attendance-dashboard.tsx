@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Plus,
   Calendar,
@@ -12,17 +12,18 @@ import {
 import { useAuthStore } from "@/features/auth/stores/auth";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { formatVietnameseDate } from "@/utils/date";
+import { formatVietnameseDate, getVNDateKey } from "@/utils/date";
 import { AttendanceTable } from "./attendance-table";
 import { GreetingHeader } from "@/components/ui/greeting-header";
-import { generateAttendanceData, getMonthSummary } from "./mock-data";
 import { getAvailableMonths } from "../utils/attendance";
 import { useCheckInCheckOut } from "@/features/attendance/hooks/use-checkin-checkout";
+import { useMyAttendance } from "@/features/attendance/hooks/use-attendance";
+import { mapAttendanceList } from "@/features/attendance/mapper/attendance";
 
 export function AttendanceDashboard() {
   const user = useAuthStore((state) => state.user);
 
-  const today = new Date();
+  const today = useMemo(() => new Date(), []);
   const currentMonth = today.getMonth() + 1;
   const currentYear = today.getFullYear();
 
@@ -33,6 +34,38 @@ export function AttendanceDashboard() {
   const [currentCheckInTime, setCurrentCheckInTime] = useState<Date | null>(
     null,
   );
+
+  const { data: attendanceResponse } = useMyAttendance({
+    month: selectedMonth,
+    year: selectedYear,
+  });
+
+  useEffect(() => {
+    if (attendanceResponse?.data) {
+      const rawData = attendanceResponse.data;
+      if (!rawData || rawData.length === 0) {
+        setIsCheckedIn(false);
+        setCurrentCheckInTime(null);
+        return;
+      }
+
+      const todayKey = getVNDateKey(today);
+      const latestRecord = rawData.find(
+        (r: any) => getVNDateKey(r.date) === todayKey,
+      );
+
+      const openSession = latestRecord?.sessions?.find(
+        (s: any) => !s.checkoutTime,
+      );
+
+      setIsCheckedIn(!!openSession);
+      if (openSession) {
+        setCurrentCheckInTime(new Date(openSession.checkinTime));
+      } else {
+        setCurrentCheckInTime(null);
+      }
+    }
+  }, [attendanceResponse, today]);
 
   const { mutate: mutateCheckinCheckout, isPending: isUpdatingAttendance } =
     useCheckInCheckOut();
@@ -49,19 +82,26 @@ export function AttendanceDashboard() {
   const capitalizedDate = formatVietnameseDate(today);
 
   const attendanceData = useMemo(
-    () => generateAttendanceData(selectedYear, selectedMonth),
-    [selectedMonth, selectedYear],
+    () => mapAttendanceList(attendanceResponse?.data || []),
+    [attendanceResponse],
   );
-  
-  const summary = useMemo(
-    () => getMonthSummary(attendanceData),
-    [attendanceData],
-  );
+
+  const summary = useMemo(() => {
+    const rawData = attendanceResponse?.data || [];
+    return {
+      totalHours: rawData
+        .reduce((sum: number, r: any) => sum + (r.totalHours || 0), 0)
+        .toFixed(1),
+      presentDays: rawData.filter((r: any) => r.status === "PRESENT").length,
+      leaveDays: rawData.filter((r: any) => r.status === "LEAVE").length,
+      absentDays: 0,
+    };
+  }, [attendanceResponse]);
 
   // Generate last 12 months for dropdown
   const availableMonths = useMemo(
     () => getAvailableMonths(currentYear, currentMonth),
-    [currentYear, currentMonth]
+    [currentYear, currentMonth],
   );
 
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

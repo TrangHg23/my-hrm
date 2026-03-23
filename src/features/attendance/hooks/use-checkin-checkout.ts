@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { checkInCheckOutApi } from "../api/attendance";
+import { checkInCheckOutApi } from "../api/checkin-checkout";
 import { toast } from "sonner";
 import { queryClient } from "@/lib/query-client";
 import { Attendance } from "@/features/attendance/types/attendance";
@@ -7,8 +7,8 @@ import { Attendance } from "@/features/attendance/types/attendance";
 export const useCheckInCheckOut = () => {
   return useMutation<Attendance, Error, void>({
     mutationFn: () => checkInCheckOutApi(),
-    onSuccess: (data: any) => {
-      const isCheckIn = data.action === "checkin";
+    onSuccess: (data: Attendance) => {
+      const isCheckIn = data.isCheckIn;
       toast.success(
         isCheckIn ? "Check-in thành công!" : "Check-out thành công!",
         {

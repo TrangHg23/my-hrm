@@ -3,11 +3,22 @@ import { AttendanceRecord } from "../types/attendance";
 export const getDayOfWeek = (dateStr: string) => {
   const [day, month] = dateStr.split("/").map(Number);
   const year = new Date().getFullYear();
-  const date = new Date(year, month - 1, day);
-  const days = ["Chủ Nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+  const date = new Date(
+    `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}T00:00:00Z`,
+  );
+  const days = [
+    "Chủ Nhật",
+    "Thứ 2",
+    "Thứ 3",
+    "Thứ 4",
+    "Thứ 5",
+    "Thứ 6",
+    "Thứ 7",
+  ];
+
   return {
-    name: days[date.getDay()],
-    isSunday: date.getDay() === 0,
+    name: days[date.getUTCDay()],
+    isSunday: date.getUTCDay() === 0,
   };
 };
 
@@ -25,11 +36,13 @@ export const formatWorkHours = (hoursStr: string) => {
 const getMondayStart = (dateStr: string) => {
   const [day, month] = dateStr.split("/").map(Number);
   const year = new Date().getFullYear();
-  const d = new Date(year, month - 1, day);
-  const dayOfWeek = d.getDay();
-  const diff = d.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-  const monday = new Date(d.setDate(diff));
-  monday.setHours(0, 0, 0, 0);
+  const d = new Date(
+    `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}T00:00:00Z`,
+  );
+  const dayOfWeek = d.getUTCDay();
+  const diff = d.getUTCDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+  const monday = new Date(d.setUTCDate(diff));
+  monday.setUTCHours(0, 0, 0, 0);
   return monday.getTime();
 };
 
