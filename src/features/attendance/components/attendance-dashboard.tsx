@@ -9,7 +9,6 @@ import {
   AlertCircle,
   Clock3,
 } from "lucide-react";
-import { format } from "date-fns";
 import { useAuthStore } from "@/features/auth/stores/auth";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -17,8 +16,8 @@ import { formatVietnameseDate } from "@/utils/date";
 import { AttendanceTable } from "./attendance-table";
 import { GreetingHeader } from "@/components/ui/greeting-header";
 import { generateAttendanceData, getMonthSummary } from "./mock-data";
-import { toast } from "sonner";
 import { getAvailableMonths } from "../utils/attendance";
+import { useCheckInCheckOut } from "@/features/attendance/hooks/use-checkin-checkout";
 
 export function AttendanceDashboard() {
   const user = useAuthStore((state) => state.user);
@@ -30,21 +29,33 @@ export function AttendanceDashboard() {
   const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth);
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
 
-  // Check-in state (Mock)
   const [isCheckedIn, setIsCheckedIn] = useState(false);
-  const [currentCheckInTime, setCurrentCheckInTime] = useState<Date | null>(null);
+  const [currentCheckInTime, setCurrentCheckInTime] = useState<Date | null>(
+    null,
+  );
+
+  const { mutate: mutateCheckinCheckout, isPending: isUpdatingAttendance } =
+    useCheckInCheckOut();
+
+  const handleCheckInOut = () => {
+    mutateCheckinCheckout(undefined, {
+      onSuccess: (data) => {
+        setIsCheckedIn(data.isCheckIn);
+        setCurrentCheckInTime(data.checkinTime);
+      },
+    });
+  };
 
   const capitalizedDate = formatVietnameseDate(today);
 
-  // Dynamic data and summary
   const attendanceData = useMemo(
     () => generateAttendanceData(selectedYear, selectedMonth),
-    [selectedMonth, selectedYear]
+    [selectedMonth, selectedYear],
   );
   
   const summary = useMemo(
     () => getMonthSummary(attendanceData),
-    [attendanceData]
+    [attendanceData],
   );
 
   // Generate last 12 months for dropdown
@@ -57,32 +68,6 @@ export function AttendanceDashboard() {
     const [m, y] = e.target.value.split("-");
     setSelectedMonth(parseInt(m, 10));
     setSelectedYear(parseInt(y, 10));
-  };
-
-  const handleCheckInOut = () => {
-    const now = new Date();
-    if (!isCheckedIn) {
-      setIsCheckedIn(true);
-      setCurrentCheckInTime(now);
-      toast.success("Check-in thành công!", {
-        description: `Bắt đầu ca làm việc lúc ${format(now, "HH:mm")}`,
-      });
-    } else {
-      if (currentCheckInTime) {
-        const diffMinutes = (now.getTime() - currentCheckInTime.getTime()) / 60000;
-        if (diffMinutes < 30) {
-          toast.error("Không thể Check-out", {
-            description: "Chưa đủ 30 phút kể từ lúc Check-in. Vui lòng tiếp tục làm việc.",
-          });
-          return;
-        }
-      }
-      setIsCheckedIn(false);
-      setCurrentCheckInTime(null);
-      toast.success("Check-out thành công!", {
-        description: `Kết thúc ca làm việc lúc ${format(now, "HH:mm")}`,
-      });
-    }
   };
 
   const selectValue = `${selectedMonth}-${selectedYear}`;
@@ -107,17 +92,24 @@ export function AttendanceDashboard() {
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
             <button
               onClick={handleCheckInOut}
+              disabled={isUpdatingAttendance}
               className={cn(
-                "h-11 px-8 group relative overflow-hidden text-primary-foreground rounded-lg transition-all hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2 w-full sm:w-auto",
+                "h-11 px-8 group relative overflow-hidden text-primary-foreground rounded-lg transition-all hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2 w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed",
                 isCheckedIn
                   ? "bg-orange-500 hover:bg-orange-600"
-                  : "bg-primary hover:bg-primary/90"
+                  : "bg-primary hover:bg-primary/90",
               )}
             >
               <span className="relative z-10 font-bold uppercase tracking-wide">
-                {isCheckedIn ? "Check-Out Ngay" : "Check-In Ngay"}
+                {isUpdatingAttendance
+                  ? "Đang xử lý..."
+                  : isCheckedIn
+                    ? "Check-Out Ngay"
+                    : "Check-In Ngay"}
               </span>
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+              {!isUpdatingAttendance && (
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+              )}
             </button>
 
             <Button
@@ -150,11 +142,13 @@ export function AttendanceDashboard() {
               onChange={handleMonthChange}
               className="flex h-8 min-w-32 rounded-md border-none bg-transparent px-2 py-0 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-0 cursor-pointer"
             >
-              {availableMonths.map(({ month, year }) => (
-                <option key={`${month}-${year}`} value={`${month}-${year}`}>
-                  {month}/{year}
-                </option>
-              ))}
+              {availableMonths.map(
+                ({ month, year }: { month: number; year: number }) => (
+                  <option key={`${month}-${year}`} value={`${month}-${year}`}>
+                    {month}/{year}
+                  </option>
+                ),
+              )}
             </select>
           </div>
         </div>
@@ -193,7 +187,12 @@ export function AttendanceDashboard() {
               key={i}
               className="bg-card p-5 rounded-xl border shadow-sm flex flex-col gap-3 hover:border-primary/50 transition-all hover:shadow-md group relative overflow-hidden"
             >
-              <div className={cn("size-10 rounded-lg flex items-center justify-center shrink-0", item.bgColor)}>
+              <div
+                className={cn(
+                  "size-10 rounded-lg flex items-center justify-center shrink-0",
+                  item.bgColor,
+                )}
+              >
                 <item.icon className={cn("size-5", item.color)} />
               </div>
               <div className="flex flex-col">

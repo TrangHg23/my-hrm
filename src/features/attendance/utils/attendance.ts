@@ -1,8 +1,8 @@
 import { AttendanceRecord } from "../types/attendance";
 
 export const getDayOfWeek = (dateStr: string) => {
-  const [day, month] = dateStr.split('/').map(Number);
-  const year = new Date().getFullYear(); 
+  const [day, month] = dateStr.split("/").map(Number);
+  const year = new Date().getFullYear();
   const date = new Date(year, month - 1, day);
   const days = ["Chủ Nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
   return {
@@ -12,18 +12,18 @@ export const getDayOfWeek = (dateStr: string) => {
 };
 
 export const formatWorkHours = (hoursStr: string) => {
-  if (!hoursStr || hoursStr.includes('0h')) return "00 giờ 00 phút";
+  if (!hoursStr || hoursStr.includes("0h")) return "00 giờ 00 phút";
   const match = hoursStr.match(/(\d+)h(?:(\d+)p[h]?)?/);
   if (match) {
-    const h = match[1].padStart(2, '0');
-    const p = (match[2] || '00').padStart(2, '0');
+    const h = match[1].padStart(2, "0");
+    const p = (match[2] || "00").padStart(2, "0");
     return `${h} giờ ${p} phút`;
   }
   return hoursStr;
 };
 
 const getMondayStart = (dateStr: string) => {
-  const [day, month] = dateStr.split('/').map(Number);
+  const [day, month] = dateStr.split("/").map(Number);
   const year = new Date().getFullYear();
   const d = new Date(year, month - 1, day);
   const dayOfWeek = d.getDay();
@@ -35,8 +35,8 @@ const getMondayStart = (dateStr: string) => {
 
 export const groupDataByWeek = (data: AttendanceRecord[]) => {
   const sortedData = [...data].sort((a, b) => {
-    const dayA = parseInt(a.date.split('/')[0], 10);
-    const dayB = parseInt(b.date.split('/')[0], 10);
+    const dayA = parseInt(a.date.split("/")[0], 10);
+    const dayB = parseInt(b.date.split("/")[0], 10);
     return dayB - dayA;
   });
 
@@ -52,7 +52,10 @@ export const groupDataByWeek = (data: AttendanceRecord[]) => {
   return Array.from(weeksMap.values());
 };
 
-export const getAvailableMonths = (currentYear: number, currentMonth: number) => {
+export const getAvailableMonths = (
+  currentYear: number,
+  currentMonth: number,
+) => {
   return Array.from({ length: 12 }, (_, i) => {
     const d = new Date(currentYear, currentMonth - 1 - i, 1);
     return { month: d.getMonth() + 1, year: d.getFullYear() };
