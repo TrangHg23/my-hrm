@@ -17,7 +17,8 @@ export const useCheckInCheckOut = () => {
             (isCheckIn ? "Bắt đầu ca làm việc." : "Kết thúc ca làm việc."),
         },
       );
-      queryClient.invalidateQueries({ queryKey: ["my-attendance"] });
+      queryClient.invalidateQueries({ queryKey: ["my-attendance"], exact: false })
+      queryClient.invalidateQueries({ queryKey: ["attendance-management"], exact: false })
     },
     onError: (error: any) => {
       toast.error("Thất bại", {

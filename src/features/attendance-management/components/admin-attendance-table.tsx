@@ -54,7 +54,7 @@ export function AdminAttendanceTable({
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={7} className="h-24 text-center">
+                <TableCell colSpan={6} className="h-24 text-center">
                   <div className="flex items-center justify-center">
                     <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                   </div>
@@ -62,7 +62,7 @@ export function AdminAttendanceTable({
               </TableRow>
             ) : data.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
+                <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
                   Không tìm thấy dữ liệu chấm công cho ngày này.
                 </TableCell>
               </TableRow>
@@ -75,7 +75,7 @@ export function AdminAttendanceTable({
                     className="group hover:bg-muted/50 transition-colors"
                   >
                     <TableCell className="font-medium text-muted-foreground uppercase text-xs sticky left-0 bg-card group-hover:bg-muted transition-colors z-10 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
-                      {record.employeeId}
+                      {record.employeeId.split("-")[0]}
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">

@@ -1,50 +1,45 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { useState, useMemo } from "react";
 import { GreetingHeader } from "@/components/ui/greeting-header";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/features/auth/stores/auth";
+import { Search } from "lucide-react";
 import { AdminAttendanceTable } from "./admin-attendance-table";
-import { generateMockAttendanceData } from "./mock-data";
-import { formatDate } from "@/utils/date";
+import { getVNDateKey } from "@/utils/date";
+import { useAttendanceManagement } from "../hooks/use-attendance-management";
+import { mapAdminAttendanceList } from "../mapper/attendance-management";
 
 export function AdminAttendanceDashboard() {
   const user = useAuthStore((state) => state.user);
-  const [selectedDate, setSelectedDate] = useState<string>(formatDate(new Date(), "yyyy-MM-dd"));
+  const [selectedDate, setSelectedDate] = useState<string>(
+    getVNDateKey(new Date()),
+  );
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [selectedDate, currentPage]);
+  const { data: apiResponse, isLoading } = useAttendanceManagement({
+    page: currentPage,
+    limit: itemsPerPage,
+    date: selectedDate,
+  });
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(e.target.value);
     setCurrentPage(1);
   };
 
-  const allData = useMemo(() => {
-    const d = new Date(selectedDate);
-    if (isNaN(d.getTime())) return [];
-    return generateMockAttendanceData(d);
-  }, [selectedDate]);
+  const currentData = useMemo(
+    () => mapAdminAttendanceList(apiResponse?.data || []),
+    [apiResponse],
+  );
 
-  const totalItems = allData.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
-  const currentData = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return allData.slice(start, start + itemsPerPage);
-  }, [allData, currentPage, itemsPerPage]);
+  const totalItems = apiResponse?.meta.total || 0;
+  const totalPages = apiResponse?.meta.totalPages || 1;
 
   return (
-    <div className="flex flex-col gap-6 w-full animate-in fade-in duration-500 overflow-hidden">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 px-1">
+    <div className="space-y-6 max-w-7xl mx-auto w-full animate-in fade-in duration-500 overflow-hidden">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 px-1">
         <GreetingHeader
           name={user?.name}
           fallbackName="Admin"
@@ -52,16 +47,25 @@ export function AdminAttendanceDashboard() {
         />
 
         {/* Filters and Actions */}
-        <div className="flex items-center w-full md:w-auto shrink-0">
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto mt-4 lg:mt-0 shrink-0">
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Tìm kiếm nhân viên..."
+              className="w-full pl-8 bg-background"
+            />
+          </div>
+
           <div className="relative w-full sm:w-56">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground pointer-events-none uppercase">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-muted-foreground pointer-events-none uppercase">
               Ngày:
             </span>
             <Input
               type="date"
               value={selectedDate}
               onChange={handleDateChange}
-              className="w-full pl-16 bg-background h-10 border-muted-foreground/20 focus:border-primary font-bold transition-all hover:border-primary/50"
+              className="w-full pl-14 bg-background h-10 border-muted-foreground/20 focus:border-primary font-bold transition-all hover:border-primary/50"
             />
           </div>
         </div>
