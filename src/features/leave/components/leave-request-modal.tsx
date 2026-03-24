@@ -18,19 +18,29 @@ interface LeaveRequestModalProps {
 
 export function LeaveRequestModal({
   children,
-  open,
-  onOpenChange,
+  open: controlledOpen,
+  onOpenChange: setControlledOpen,
 }: LeaveRequestModalProps) {
+  const [internalOpen, setInternalOpen] = React.useState(false);
+
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = isControlled ? setControlledOpen : setInternalOpen;
+
+  const handleOpenChange = (val: boolean) => {
+    setOpen?.(val);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-125 p-0 overflow-hidden border-none bg-transparent shadow-none">
         <DialogHeader className="sr-only">
           <DialogTitle>Tạo đơn xin nghỉ</DialogTitle>
         </DialogHeader>
         <LeaveRequestForm
-          onSuccess={() => onOpenChange?.(false)}
-          onClose={() => onOpenChange?.(false)}
+          onSuccess={() => handleOpenChange(false)}
+          onClose={() => handleOpenChange(false)}
         />
       </DialogContent>
     </Dialog>

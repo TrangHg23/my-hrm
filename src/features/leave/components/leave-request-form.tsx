@@ -26,6 +26,7 @@ import {
 } from "../schemas/leave-request-schema";
 import { getVNDateKey } from "@/utils/date";
 import { addMinutes } from "@/features/leave/utils/leave";
+import { useCreateLeaveRequest } from "../hooks/use-create-leave-request";
 
 interface LeaveRequestFormProps {
   onSuccess?: () => void;
@@ -38,6 +39,7 @@ export default function LeaveRequestForm({
 }: LeaveRequestFormProps) {
   const { range, setRange, isMultipleDays } = useDateRange();
   const [timeMode, setTimeMode] = useState<string>("full-day");
+  const { mutateAsync: createLeaveRequest, isPending } = useCreateLeaveRequest();
 
   const form = useForm<LeaveRequestFormValues>({
     resolver: zodResolver(leaveRequestSchema),
@@ -84,9 +86,13 @@ export default function LeaveRequestForm({
     }
   }, [timeMode, isMultipleDays, setValue]);
 
-  const onSubmit = (values: LeaveRequestFormValues) => {
-    console.log("Validated Form Data:", values);
-    onSuccess?.();
+  const onSubmit = async (values: LeaveRequestFormValues) => {
+    try {
+      await createLeaveRequest(values);
+      onSuccess?.();
+    } catch (error) {
+      console.error("Submit error:", error);
+    }
   };
 
   return (
@@ -293,8 +299,10 @@ export default function LeaveRequestForm({
             <Button
               className="flex-1 h-12 rounded-xl typo-body-md font-bold bg-primary text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all active:scale-[0.98]"
               type="submit"
+              disabled={isPending}
             >
-              Gửi đơn <Send className="ml-2 h-4 w-4" />
+              {isPending ? "Đang gửi..." : "Gửi đơn"}{" "}
+              {!isPending && <Send className="ml-2 h-4 w-4" />}
             </Button>
           </div>
         </div>
