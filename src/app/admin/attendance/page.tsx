@@ -1,11 +1,11 @@
+import { AdminAttendanceDashboard } from "@/features/attendance-management/components/admin-attendance-dashboard";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Quản lý chấm công | Admin",
+  description: "Trang quản lý chấm công dành cho Admin",
+};
+
 export default function AdminAttendancePage() {
-  return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-bold tracking-tight">Quản lý chấm công</h1>
-      <p className="text-muted-foreground">
-        Theo dõi và quản lý dữ liệu chấm công của toàn bộ nhân viên.
-      </p>
-      {/* Table content goes here */}
-    </div>
-  );
+  return <AdminAttendanceDashboard />;
 }

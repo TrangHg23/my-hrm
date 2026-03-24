@@ -4,6 +4,7 @@ import { useState } from "react";
 import { formatDate } from "@/utils/date";
 import { Search, Eye, Edit, Loader2, Plus } from "lucide-react";
 import { useAuthStore } from "@/features/auth/stores/auth";
+import { GreetingHeader } from "@/components/ui/greeting-header";
 
 import {
   TableBody,
@@ -18,7 +19,6 @@ import { Input } from "@/components/ui/input";
 import { useGetEmployees } from "@/features/employee-management/hooks/use-get-employees";
 import { EmployeeFormModal } from "@/features/employee-management/components/employee-form-modal";
 import { EmployeeDetailModal } from "@/features/employee-management/components/employee-detail-modal";
-import { Employee } from "@/features/employee-management/types/employees";
 
 import { useEmployeeModalStore } from "@/features/employee-management/stores/employee-modal";
 
@@ -45,17 +45,11 @@ export default function EmployeeManagementPage() {
     <div className="space-y-6 max-w-7xl mx-auto w-full">
       {/* Header section with Greeting */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div className="flex-1 min-w-0">
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-primary flex items-center gap-2 flex-wrap">
-            Chào buổi sáng, {user?.name || "Admin"}
-            <span className="text-2xl origin-bottom-right rotate-12 animate-wave inline-block shrink-0">
-              👋
-            </span>
-          </h1>
-          <p className="text-muted-foreground mt-1 text-sm md:text-base">
-            Dưới đây là danh sách nhân viên hiện tại của công ty.
-          </p>
-        </div>
+        <GreetingHeader
+          name={user?.name}
+          fallbackName="Admin"
+          subtitle="Dưới đây là danh sách nhân viên hiện tại của công ty."
+        />
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto mt-4 lg:mt-0 shrink-0">
