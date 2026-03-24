@@ -19,6 +19,7 @@ import { getAvailableMonths } from "../utils/attendance";
 import { useCheckInCheckOut } from "@/features/attendance/hooks/use-checkin-checkout";
 import { useMyAttendance } from "@/features/attendance/hooks/use-attendance";
 import { mapAttendanceList } from "@/features/attendance/mapper/attendance";
+import { LeaveRequestModal } from "@/features/leave/components/leave-request-modal";
 
 export function AttendanceDashboard() {
   const user = useAuthStore((state) => state.user);
@@ -152,13 +153,15 @@ export function AttendanceDashboard() {
               )}
             </button>
 
-            <Button
-              variant="outline"
-              className="h-11 px-6 rounded-lg border-dashed hover:border-primary hover:bg-primary/5 hover:text-primary transition-all gap-2 w-full sm:w-auto"
-            >
-              <Plus className="size-4" />
-              <span className="font-bold">Tạo đơn</span>
-            </Button>
+            <LeaveRequestModal>
+              <Button
+                variant="outline"
+                className="h-11 px-6 rounded-lg border-dashed hover:border-primary hover:bg-primary/5 hover:text-primary transition-all gap-2 w-full sm:w-auto"
+              >
+                <Plus className="size-4" />
+                <span className="font-bold">Tạo đơn</span>
+              </Button>
+            </LeaveRequestModal>
           </div>
         </div>
       </div>
