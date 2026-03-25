@@ -20,9 +20,11 @@ import {
 } from "@/components/ui/tooltip";
 import { TablePagination } from "@/components/ui/table-pagination";
 import { LeaveDurationBadge } from "@/components/ui/leave-duration-badge";
-import { FAKE_LEAVE_REQUESTS } from "./mock-data";
+import { LeaveRequest } from "@/features/leave/types/leave";
 
 interface LeaveManagementTableProps {
+  data: LeaveRequest[];
+  isLoading: boolean;
   pagination?: {
     currentPage: number;
     totalPages: number;
@@ -32,10 +34,14 @@ interface LeaveManagementTableProps {
   };
 }
 
-export function LeaveManagementTable({ pagination }: LeaveManagementTableProps) {
+export function LeaveManagementTable({
+  data,
+  isLoading,
+  pagination,
+}: LeaveManagementTableProps) {
   return (
     <TooltipProvider>
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm flex flex-col overflow-hidden h-[calc(100vh-280px)] min-h-100">
+      <div className="rounded-xl border border-slate-200 bg-white shadow-md flex flex-col overflow-hidden h-[calc(100vh-260px)] min-h-125">
         <div className="flex-1 overflow-auto relative custom-scrollbar">
           <table className="w-full text-sm min-w-250 border-separate border-spacing-0">
             <TableHeader className="bg-slate-50/80 sticky top-0 z-20 backdrop-blur-md border-b border-slate-200">
@@ -47,10 +53,10 @@ export function LeaveManagementTable({ pagination }: LeaveManagementTableProps) 
                   <Typography variant="body-sm" className="font-bold text-slate-900">Mã đơn</Typography>
                 </TableHead>
                 <TableHead className="w-40">
-                  <Typography variant="body-sm" className="font-bold text-slate-900">Thời gian tạo</Typography>
+                  <Typography variant="body-sm" className="font-bold text-slate-900 whitespace-nowrap">Thời gian tạo</Typography>
                 </TableHead>
                 <TableHead>
-                  <Typography variant="body-sm" className="font-bold text-slate-900">Thời gian nghỉ</Typography>
+                  <Typography variant="body-sm" className="font-bold text-slate-900 whitespace-nowrap">Thời gian nghỉ</Typography>
                 </TableHead>
                 <TableHead className="text-center">
                   <Typography variant="body-sm" className="font-bold text-slate-900">Thời lượng</Typography>
@@ -67,35 +73,65 @@ export function LeaveManagementTable({ pagination }: LeaveManagementTableProps) 
               </TableRow>
             </TableHeader>
             <TableBody>
-              {FAKE_LEAVE_REQUESTS.map((request) => (
-                <TableRow key={request.id} className="group hover:bg-slate-50/60 transition-colors border-b last:border-0">
-                  <TableCell className="pl-6 py-4 sticky left-0 bg-white group-hover:bg-slate-50 transition-colors z-10 w-48 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
-                    <div className="flex items-center gap-3">
-                      <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
-                        <User className="size-4 text-primary" />
-                      </div>
-                      <div className="flex flex-col min-w-0">
-                        <Typography variant="body-sm" className="font-bold text-slate-900 truncate">
-                          {request.user.name}
-                        </Typography>
-                        <Typography variant="helper" className="text-slate-400 truncate">
-                          {request.user.email}
-                        </Typography>
-                      </div>
-                    </div>
+              {isLoading && (
+                <TableRow>
+                  <TableCell colSpan={8} className="py-10 text-center">
+                    <Typography variant="body-sm" className="text-slate-400 italic">Đang tải dữ liệu...</Typography>
                   </TableCell>
-                  
-                  <TableCell className="py-4">
-                    <Typography variant="body-sm" className="font-mono text-slate-600 uppercase tracking-wider font-bold">
-                      #{request.id.split("-").slice(0, 2).join("-")}
-                    </Typography>
+                </TableRow>
+              )}
+              {!isLoading && data.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={8} className="py-10 text-center">
+                    <Typography variant="body-sm" className="text-slate-400 italic">Không có yêu cầu nào cần xử lý.</Typography>
                   </TableCell>
+                </TableRow>
+              )}
+              {!isLoading &&
+                data.map((request) => (
+                  <TableRow
+                    key={request.id}
+                    className="group hover:bg-slate-50/60 transition-colors border-b last:border-0"
+                  >
+                    <TableCell className="pl-6 py-4 sticky left-0 bg-white group-hover:bg-slate-50 transition-colors z-10 w-48 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
+                      <div className="flex items-center gap-3">
+                        <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
+                          <User className="size-4 text-primary" />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <Typography
+                            variant="body-sm"
+                            className="font-bold text-slate-900 truncate"
+                          >
+                            {request.user.name}
+                          </Typography>
+                          <Typography
+                            variant="helper"
+                            className="text-slate-400 truncate"
+                          >
+                            {request.user.email}
+                          </Typography>
+                        </div>
+                      </div>
+                    </TableCell>
 
-                  <TableCell className="py-4">
-                    <Typography variant="helper" className="text-slate-500 font-medium not-italic">
-                      {formatDate(request.createdAt, "dd/MM/yyyy HH:mm")}
-                    </Typography>
-                  </TableCell>
+                    <TableCell className="py-4">
+                      <Typography
+                        variant="body-sm"
+                        className="font-mono text-slate-600 uppercase tracking-wider font-bold"
+                      >
+                        #{request.id.split("-").slice(0, 2).join("-")}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell className="py-4">
+                      <Typography
+                        variant="helper"
+                        className="text-slate-500 font-medium not-italic"
+                      >
+                        {formatDate(request.createdAt, "dd/MM/yyyy HH:mm")}
+                      </Typography>
+                    </TableCell>
 
                   <TableCell className="py-4">
                     {request.fromDate === request.toDate ? (
@@ -120,67 +156,87 @@ export function LeaveManagementTable({ pagination }: LeaveManagementTableProps) 
                     )}
                   </TableCell>
 
-                  <TableCell className="py-4 text-center">
-                    <LeaveDurationBadge 
-                      isFullDay={request.isFullDay}
-                      startTime={request.startTime}
-                      endTime={request.endTime}
-                    />
-                  </TableCell>
+                    <TableCell className="py-4 text-center">
+                      <LeaveDurationBadge
+                        isFullDay={request.isFullDay}
+                        startTime={request.startTime}
+                        endTime={request.endTime}
+                      />
+                    </TableCell>
 
-                  <TableCell className="py-4 max-w-50 text-left">
-                    <Typography variant="body-sm" className="text-slate-600 line-clamp-1 leading-relaxed" title={request.reason}>
-                      {request.reason || "---"}
-                    </Typography>
-                  </TableCell>
-
-                  <TableCell className="py-4 text-center">
-                    <div className="flex flex-col items-center gap-1">
-                      <StatusBadge status={request.status.toLowerCase() as any} />
-                      {request.status.toLowerCase() === "rejected" && request.rejectReason && (
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <span className="flex items-center gap-1 text-rose-500">
-                              <Info className="size-3" /> 
-                              <Typography variant="helper" className="font-medium text-inherit">Lý do từ chối</Typography>
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-slate-900 text-white border-none">
-                            <Typography variant="helper" className="max-w-50">{request.rejectReason}</Typography>
-                          </TooltipContent>
-                        </Tooltip>
-                      )}
-                    </div>
-                  </TableCell>
-
-                  <TableCell className="pr-6 py-4 text-right">
-                    {request.status === "PENDING" ? (
-                      <div className="flex items-center justify-end gap-2">
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="size-8 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 border border-emerald-200/50 shadow-sm transition-all"
-                          title="Phê duyệt"
-                        >
-                          <Check className="size-4" />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="size-8 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 border border-rose-200/50 shadow-sm transition-all"
-                          title="Từ chối"
-                        >
-                          <X className="size-4" />
-                        </Button>
-                      </div>
-                    ) : (
-                      <Typography variant="helper" className="text-slate-400 font-medium italic">
-                        Đã xử lý bởi {request.approverName || "Admin"}
+                    <TableCell className="py-4 max-w-50 text-left">
+                      <Typography
+                        variant="body-sm"
+                        className="text-slate-600 line-clamp-1 leading-relaxed"
+                        title={request.reason}
+                      >
+                        {request.reason || "---"}
                       </Typography>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+
+                    <TableCell className="py-4 text-center">
+                      <div className="flex flex-col items-center gap-1">
+                        <StatusBadge
+                          status={request.status.toLowerCase() as any}
+                        />
+                        {request.status.toLowerCase() === "rejected" &&
+                          request.rejectReason && (
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <span className="flex items-center gap-1 text-rose-500">
+                                  <Info className="size-3" />
+                                  <Typography
+                                    variant="helper"
+                                    className="font-medium text-inherit"
+                                  >
+                                    Lý do từ chối
+                                  </Typography>
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent className="bg-slate-900 text-white border-none">
+                                <Typography
+                                  variant="helper"
+                                  className="max-w-50"
+                                >
+                                  {request.rejectReason}
+                                </Typography>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
+                      </div>
+                    </TableCell>
+
+                    <TableCell className="pr-6 py-4 text-right">
+                      {request.status === "PENDING" ? (
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="size-8 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 border border-emerald-200/50 shadow-sm transition-all"
+                            title="Phê duyệt"
+                          >
+                            <Check className="size-4" />
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="size-8 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 border border-rose-200/50 shadow-sm transition-all"
+                            title="Từ chối"
+                          >
+                            <X className="size-4" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <Typography
+                          variant="helper"
+                          className="text-slate-400 font-medium italic"
+                        >
+                          Đã xử lý bởi {request.processedBy?.name || "Admin"}
+                        </Typography>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </table>
         </div>
