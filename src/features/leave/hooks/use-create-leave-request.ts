@@ -3,6 +3,7 @@ import { createLeaveRequestApi } from "../api/create-leave-request";
 import { toast } from "sonner";
 import { queryClient } from "@/lib/query-client";
 import { leaveKeys } from "../queryKeys/leave";
+import { parseErrorMessage } from "@/utils/error";
 
 export const useCreateLeaveRequest = () => {
   return useMutation({
@@ -13,10 +14,12 @@ export const useCreateLeaveRequest = () => {
       });
       queryClient.invalidateQueries({ queryKey: leaveKeys.me() });
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       toast.error("Tạo đơn thất bại", {
-        description:
-          error?.response?.data?.message || "Có lỗi xảy ra khi gửi đơn xin nghỉ.",
+        description: parseErrorMessage(error, {
+          overlaps:
+            "Khoảng thời gian này trùng với một đơn nghỉ bạn đã tạo. Vui lòng kiểm tra lại.",
+        }),
       });
     },
   });

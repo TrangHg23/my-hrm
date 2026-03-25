@@ -78,7 +78,7 @@ export function LeaveHistoryTable({
                   >
                     <TableCell className="pl-6 py-4 w-24">
                       <Typography variant="body-sm" className="font-mono text-slate-600 uppercase tracking-wider font-bold">
-                        #{request.id.split("-")[0]}
+                        #{request.id.split("-").slice(0, 2).join("-")}
                       </Typography>
                     </TableCell>
 
@@ -89,10 +89,26 @@ export function LeaveHistoryTable({
                     </TableCell>
 
                     <TableCell className="py-4 sticky left-0 bg-white group-hover:bg-slate-50 transition-colors z-10 w-44 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
-                      <Typography variant="body-sm" className="font-bold text-slate-900">
-                        {request.fromDate === request.toDate ? formatDate(request.fromDate) : 
-                        `${formatDate(request.fromDate)} - ${formatDate(request.toDate)}`}
-                      </Typography>
+                      {request.fromDate === request.toDate ? (
+                        <Typography variant="body-sm" className="font-bold text-slate-900 whitespace-nowrap">
+                          {formatDate(request.fromDate)}
+                        </Typography>
+                      ) : (
+                        <div className="flex flex-col border-l-2 border-primary/30 pl-2 py-0.5">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-bold text-slate-400 w-6 uppercase">Từ</span>
+                            <span className="text-sm font-bold text-slate-700 whitespace-nowrap">
+                              {formatDate(request.fromDate)}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-bold text-slate-400 w-6 uppercase">Đến</span>
+                            <span className="text-sm font-bold text-slate-700 whitespace-nowrap">
+                              {formatDate(request.toDate)}
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </TableCell>
 
                     <TableCell className="py-4 text-center">
