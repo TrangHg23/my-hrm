@@ -50,10 +50,10 @@ export function LeaveHistoryTable({
                   <Typography variant="body-sm" className="font-bold text-slate-900">Mã đơn</Typography>
                 </TableHead>
                 <TableHead className="w-40">
-                  <Typography variant="body-sm" className="font-bold text-slate-900">Thời gian tạo</Typography>
+                  <Typography variant="body-sm" className="font-bold text-slate-900 whitespace-nowrap">Thời gian tạo</Typography>
                 </TableHead>
                 <TableHead className="w-44 sticky left-0 bg-slate-50 z-30">
-                  <Typography variant="body-sm" className="font-bold text-slate-900">Thời gian nghỉ</Typography>
+                  <Typography variant="body-sm" className="font-bold text-slate-900 whitespace-nowrap">Thời gian nghỉ</Typography>
                 </TableHead>
                 <TableHead className="text-center">
                   <Typography variant="body-sm" className="font-bold text-slate-900">Thời lượng</Typography>
@@ -62,10 +62,10 @@ export function LeaveHistoryTable({
                   <Typography variant="body-sm" className="font-bold text-slate-900">Lý do nghỉ</Typography>
                 </TableHead>
                 <TableHead className="min-w-48">
-                  <Typography variant="body-sm" className="font-bold text-slate-900">Người phê duyệt</Typography>
+                  <Typography variant="body-sm" className="font-bold text-slate-900 whitespace-nowrap">Người phê duyệt</Typography>
                 </TableHead>
                 <TableHead className="text-center pr-6">
-                  <Typography variant="body-sm" className="font-bold text-slate-900">Trạng thái</Typography>
+                  <Typography variant="body-sm" className="font-bold text-slate-900 whitespace-nowrap">Trạng thái</Typography>
                 </TableHead>
               </TableRow>
             </TableHeader>
