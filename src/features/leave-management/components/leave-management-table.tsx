@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { User, Check, X, Info } from "lucide-react";
 import {
   TableBody,
@@ -21,6 +22,9 @@ import {
 import { TablePagination } from "@/components/ui/table-pagination";
 import { LeaveDurationBadge } from "@/components/ui/leave-duration-badge";
 import { LeaveRequest } from "@/features/leave/types/leave";
+import { useApproveLeaveRequest } from "../hooks/use-approve-leave-request";
+import { useRejectLeaveRequest } from "../hooks/use-reject-leave-request";
+import { ProcessLeaveModal } from "./process-leave-modal";
 
 interface LeaveManagementTableProps {
   data: LeaveRequest[];
@@ -39,6 +43,37 @@ export function LeaveManagementTable({
   isLoading,
   pagination,
 }: LeaveManagementTableProps) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [activeRequest, setActiveRequest] = useState<LeaveRequest | null>(null);
+  const [actionType, setActionType] = useState<"approve" | "reject" | null>(null);
+
+  const { mutate: approveRequest, isPending: isApproving } = useApproveLeaveRequest();
+  const { mutate: rejectRequest, isPending: isRejecting } = useRejectLeaveRequest();
+
+  const handleApproveClick = (request: LeaveRequest) => {
+    setActiveRequest(request);
+    setActionType("approve");
+    setModalOpen(true);
+  };
+
+  const handleRejectClick = (request: LeaveRequest) => {
+    setActiveRequest(request);
+    setActionType("reject");
+    setModalOpen(true);
+  };
+
+  const handleConfirm = (id: string, reason?: string) => {
+    if (actionType === "approve") {
+      approveRequest(id, {
+        onSuccess: () => setModalOpen(false),
+      });
+    } else if (actionType === "reject" && reason) {
+      rejectRequest(
+        { id, rejectReason: reason },
+        { onSuccess: () => setModalOpen(false) }
+      );
+    }
+  };
   return (
     <TooltipProvider>
       <div className="rounded-xl border border-slate-200 bg-white shadow-md flex flex-col overflow-hidden h-[calc(100vh-260px)] min-h-125">
@@ -214,6 +249,8 @@ export function LeaveManagementTable({
                             variant="ghost"
                             className="size-8 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 border border-emerald-200/50 shadow-sm transition-all"
                             title="Phê duyệt"
+                            onClick={() => handleApproveClick(request)}
+                            disabled={isApproving || isRejecting}
                           >
                             <Check className="size-4" />
                           </Button>
@@ -222,6 +259,8 @@ export function LeaveManagementTable({
                             variant="ghost"
                             className="size-8 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 border border-rose-200/50 shadow-sm transition-all"
                             title="Từ chối"
+                            onClick={() => handleRejectClick(request)}
+                            disabled={isApproving || isRejecting}
                           >
                             <X className="size-4" />
                           </Button>
@@ -251,6 +290,15 @@ export function LeaveManagementTable({
           />
         )}
       </div>
+
+      <ProcessLeaveModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        request={activeRequest}
+        type={actionType}
+        onConfirm={handleConfirm}
+        isLoading={isApproving || isRejecting}
+      />
     </TooltipProvider>
   );
 }
