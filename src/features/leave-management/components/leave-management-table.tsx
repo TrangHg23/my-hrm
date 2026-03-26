@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { User, Check, X, Info } from "lucide-react";
+import { User, Check, X, Info, AlertCircle } from "lucide-react";
 import {
   TableBody,
   TableCell,
@@ -18,6 +18,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  TooltipArrow,
 } from "@/components/ui/tooltip";
 import { TablePagination } from "@/components/ui/table-pagination";
 import { LeaveDurationBadge } from "@/components/ui/leave-duration-badge";
@@ -155,7 +156,7 @@ export function LeaveManagementTable({
                         variant="body-sm"
                         className="font-mono text-slate-600 uppercase tracking-wider font-bold"
                       >
-                        #{request.id.split("-").slice(0, 2).join("-")}
+                        #{request.id.slice(0, 6)}
                       </Typography>
                     </TableCell>
 
@@ -200,13 +201,36 @@ export function LeaveManagementTable({
                     </TableCell>
 
                     <TableCell className="py-4 max-w-50 text-left">
-                      <Typography
-                        variant="body-sm"
-                        className="text-slate-600 line-clamp-1 leading-relaxed"
-                        title={request.reason}
-                      >
-                        {request.reason || "---"}
-                      </Typography>
+                      {request.reason ? (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Typography
+                              variant="body-sm"
+                              className="text-slate-600 hover:text-primary cursor-help line-clamp-1 leading-relaxed transition-colors"
+                            >
+                              {request.reason}
+                            </Typography>
+                          </TooltipTrigger>
+                          <TooltipContent 
+                            side="top" 
+                            align="start"
+                            className="bg-slate-900 text-white border-none p-4 max-w-80 shadow-2xl rounded-xl animate-in fade-in zoom-in duration-200"
+                          >
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-1">
+                                <Info className="size-4 text-primary shrink-0" />
+                                <Typography variant="helper" className="font-bold text-slate-400 uppercase tracking-[0.2em] text-[10px]">Chi tiết lý do nghỉ</Typography>
+                              </div>
+                              <Typography variant="body-sm" className="leading-relaxed text-slate-200 whitespace-pre-wrap font-medium">
+                                {request.reason}
+                              </Typography>
+                              <TooltipArrow className="fill-slate-900 border-none" />
+                            </div>
+                          </TooltipContent>
+                        </Tooltip>
+                      ) : (
+                        <Typography variant="body-sm" className="text-slate-400 italic">---</Typography>
+                      )}
                     </TableCell>
 
                     <TableCell className="py-4 text-center">
@@ -217,24 +241,31 @@ export function LeaveManagementTable({
                         {request.status.toLowerCase() === "rejected" &&
                           request.rejectReason && (
                             <Tooltip>
-                              <TooltipTrigger>
-                                <span className="flex items-center gap-1 text-rose-500">
+                              <TooltipTrigger asChild>
+                                <span className="flex items-center gap-1 text-rose-500 hover:text-rose-600 cursor-help transition-colors">
                                   <Info className="size-3" />
                                   <Typography
                                     variant="helper"
-                                    className="font-medium text-inherit"
+                                    className="font-bold text-inherit uppercase tracking-wider text-[10px]"
                                   >
                                     Lý do từ chối
                                   </Typography>
                                 </span>
                               </TooltipTrigger>
-                              <TooltipContent className="bg-slate-900 text-white border-none">
-                                <Typography
-                                  variant="helper"
-                                  className="max-w-50"
-                                >
-                                  {request.rejectReason}
-                                </Typography>
+                              <TooltipContent 
+                                side="bottom" 
+                                className="bg-slate-900 text-white border-none p-3 max-w-72 shadow-2xl rounded-xl animate-in fade-in zoom-in duration-200"
+                              >
+                                <div className="space-y-1.5">
+                                  <div className="flex items-center gap-2 border-b border-white/10 pb-1.5 mb-1.5">
+                                    <AlertCircle className="size-3.5 text-rose-400" />
+                                    <Typography variant="helper" className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Phản hồi từ Admin</Typography>
+                                  </div>
+                                  <Typography variant="body-sm" className="leading-relaxed whitespace-pre-wrap font-medium">
+                                    {request.rejectReason}
+                                  </Typography>
+                                  <TooltipArrow className="fill-slate-900 border-none" />
+                                </div>
                               </TooltipContent>
                             </Tooltip>
                           )}
