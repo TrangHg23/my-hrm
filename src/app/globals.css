@@ -62,6 +62,20 @@
   --background-image-primary-gradient: var(--gradient-primary);
 }
 
+@utility typo-helper { @apply text-[12px] font-medium italic; }
+@utility typo-caption { @apply text-xs font-semibold; }
+@utility typo-body-sm { @apply text-sm font-normal; }
+@utility typo-body-md { @apply text-sm font-medium; }
+@utility typo-body-lg { @apply text-base font-medium; }
+
+@utility typo-label-caps { @apply text-[10px] font-bold uppercase tracking-widest; }
+@utility typo-label-md { @apply text-sm font-medium; }
+@utility typo-label-lg { @apply text-lg font-bold tracking-tight; }
+
+@utility typo-h3 { @apply text-lg font-bold; }
+@utility typo-h2 { @apply text-xl font-bold; }
+@utility typo-h1 { @apply text-2xl font-bold tracking-tight; }
+
 :root {
   --background: oklch(0.985 0.005 240);
   --foreground: oklch(0.2 0.04 240);

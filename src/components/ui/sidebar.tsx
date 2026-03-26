@@ -23,6 +23,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  TooltipArrow,
 } from "@/components/ui/tooltip"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
@@ -540,7 +541,9 @@ function SidebarMenuButton({
         align="center"
         hidden={state !== "collapsed" || isMobile}
         {...tooltip}
-      />
+      >
+        <TooltipArrow />
+      </TooltipContent>
     </Tooltip>
   )
 }
