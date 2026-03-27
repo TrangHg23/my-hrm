@@ -8,7 +8,7 @@ import {
   User,
   Settings,
 } from "lucide-react";
-import { adminNavItems } from "@/features/admin/constants/admin-nav-items";
+import { employeeNavItems } from "@/components/layouts/constants/employee-nav-items";
 import {
   Sidebar,
   SidebarContent,
@@ -32,8 +32,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuthStore } from "@/features/auth/stores/auth";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 
-
-export function AdminSidebar({
+export function EmployeeSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const user = useAuthStore((state) => state.user);
@@ -41,7 +40,7 @@ export function AdminSidebar({
   const pathname = usePathname();
 
   const getFallbackName = (name: string) => {
-    if (!name) return "AD";
+    if (!name) return "EM";
     return name.charAt(0).toUpperCase();
   };
 
@@ -60,7 +59,7 @@ export function AdminSidebar({
 
       <SidebarContent className="px-2 mt-4">
         <SidebarMenu className="gap-2">
-          {adminNavItems.map((item) => {
+          {employeeNavItems.map((item) => {
             const isActive = pathname.startsWith(item.url);
             
             return (
@@ -107,7 +106,7 @@ export function AdminSidebar({
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="bg-transparent hover:bg-transparent data-[state=open]:bg-transparent"
+                  className="bg-transparent hover:bg-transparent data-[state=open]:bg-transparent focus:bg-transparent focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
                 >
                   <Avatar className="h-8 w-8 rounded-lg">
                     <AvatarFallback className="bg-primary text-primary-foreground font-bold">
@@ -116,10 +115,10 @@ export function AdminSidebar({
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden ml-2">
                     <span className="truncate font-semibold text-foreground">
-                      {user?.name || "Admin"}
+                      {user?.name || "Employee"}
                     </span>
                     <span className="truncate text-xs text-muted-foreground">
-                      {user?.email || "admin@example.com"}
+                      {user?.email || "employee@example.com"}
                     </span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4 group-data-[collapsible=icon]:hidden" />

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { EmployeeSidebar } from "@/features/employee/components/employee-sidebar";
+import { EmployeeSidebar } from "@/components/layouts/employee-sidebar";
 
 export default function EmployeeLayout({
   children,

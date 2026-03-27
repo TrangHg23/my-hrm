@@ -2,7 +2,7 @@
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UserRole } from "@/enums/user";
-import { AdminSidebar } from "@/features/admin/components/admin-sidebar";
+import { AdminSidebar } from "@/components/layouts/admin-sidebar";
 import { useAuthStore } from "@/features/auth/stores/auth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
