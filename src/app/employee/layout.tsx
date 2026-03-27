@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { EmployeeSidebar } from "@/components/layouts/employee-sidebar";
+import { Header } from "@/components/layouts/header";
 
 export default function EmployeeLayout({
   children,
@@ -54,7 +55,8 @@ export default function EmployeeLayout({
             </div>
             <SidebarTrigger />
           </div>
-          <div className="p-4">
+          <div className="p-4 space-y-4">
+            <Header />
             {children}
           </div>
         </main>

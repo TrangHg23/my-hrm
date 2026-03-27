@@ -4,7 +4,6 @@ import { useState } from "react";
 import { formatDate } from "@/utils/date";
 import { Search, Eye, Edit, Loader2, Plus } from "lucide-react";
 import { useAuthStore } from "@/features/auth/stores/auth";
-import { GreetingHeader } from "@/components/ui/greeting-header";
 
 import {
   TableBody,
@@ -45,11 +44,6 @@ export default function EmployeeManagementPage() {
     <div className="space-y-6 max-w-7xl mx-auto w-full">
       {/* Header section with Greeting */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <GreetingHeader
-          name={user?.name}
-          fallbackName="Admin"
-          subtitle="Dưới đây là danh sách nhân viên hiện tại của công ty."
-        />
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto mt-4 lg:mt-0 shrink-0">

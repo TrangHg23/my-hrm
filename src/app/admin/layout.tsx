@@ -3,6 +3,7 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UserRole } from "@/enums/user";
 import { AdminSidebar } from "@/components/layouts/admin-sidebar";
+import { Header } from "@/components/layouts/header";
 import { useAuthStore } from "@/features/auth/stores/auth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -54,7 +55,8 @@ export default function AdminLayout({
             </div>
             <SidebarTrigger />
           </div>
-          <div className="p-4">
+          <div className="p-4 space-y-4">
+            <Header />
             {children}
           </div>
         </main>
