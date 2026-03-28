@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { LeaveRequest } from "@/features/leave/types/leave";
+import { Typography } from "@/components/ui/typography";
 import { Check, AlertCircle, Loader2, Info } from "lucide-react";
 
 interface ProcessLeaveModalProps {
@@ -90,20 +91,20 @@ export function ProcessLeaveModal({
             {isApprove
               ? `Xác nhận phê duyệt yêu cầu nghỉ phép của `
               : `Vui lòng nhập lý do từ chối đơn xin nghỉ của `}
-            <span className="font-bold text-slate-900">
+            <Typography as="span" variant="body-sm" className="font-bold text-slate-900">
               {request.user.name}
-            </span>
+            </Typography>
             ?
           </DialogDescription>
 
           <div className="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-100 flex flex-col gap-2 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-center gap-2 border-b border-slate-200 pb-2 mb-1">
               <Info className="size-4 text-slate-400" />
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Lý do nghỉ phép</span>
+              <Typography as="span" variant="label-caps" className="text-slate-400 uppercase tracking-[0.2em]">Lý do nghỉ phép</Typography>
             </div>
-            <p className="text-sm text-slate-600 font-medium leading-relaxed italic">
+            <Typography variant="body-sm" as="p" className="text-slate-600 font-medium leading-relaxed italic">
               &ldquo;{request.reason || "Không có lý do cụ thể"}&rdquo;
-            </p>
+            </Typography>
           </div>
         </DialogHeader>
 

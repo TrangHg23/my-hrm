@@ -11,6 +11,7 @@ import { LeaveRequestModal } from "@/features/leave/components/leave-request-mod
 import { useAuthStore } from "@/features/auth/stores/auth";
 import { UserRole } from "@/enums/user";
 import { GreetingHeader } from "@/components/layouts/greeting-header";
+import { Typography } from "@/components/ui/typography";
 
 interface AttendanceCardProps {
   subtitle?: React.ReactNode;
@@ -76,26 +77,26 @@ export function AttendanceCard({ subtitle }: AttendanceCardProps = {}) {
         </div>
       ) : (
         <div className="flex flex-col gap-1.5">
-          <div className="flex items-center gap-2 text-lg font-semibold text-foreground">
+          <div className="flex items-center gap-2 text-foreground">
             <Calendar className="size-5 text-primary" />
-            <span>{capitalizedDate}</span>
+            <Typography as="span" variant="h3">{capitalizedDate}</Typography>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <Typography as="p" variant="body-sm" className="text-muted-foreground">
             Sẵn sàng để bắt đầu một ngày làm việc hiệu quả!
-          </p>
+          </Typography>
         </div>
       )}
 
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
         {!isEmployee ? (
           <div className="flex flex-col gap-1.5 md:items-end w-full">
-            <div className="flex items-center justify-start md:justify-end gap-2 text-lg font-semibold text-foreground">
+            <div className="flex items-center justify-start md:justify-end gap-2 text-foreground">
               <Calendar className="size-5 text-primary" />
-              <span>{capitalizedDate}</span>
+              <Typography as="span" variant="h3">{capitalizedDate}</Typography>
             </div>
-            <p className="text-sm text-muted-foreground md:text-right">
+            <Typography as="p" variant="body-sm" className="text-muted-foreground md:text-right">
               Sẵn sàng để bắt đầu một ngày làm việc hiệu quả!
-            </p>
+            </Typography>
           </div>
         ) : (
           <>

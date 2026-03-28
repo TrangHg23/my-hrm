@@ -11,6 +11,7 @@ import { TablePagination } from "@/components/ui/table-pagination";
 import { AdminAttendanceRecord, AdminWorkSession } from "../types/attendance-management";
 import { Loader2 } from "lucide-react";
 import { getStatusConfig } from "../utils/attendance";
+import { Typography } from "@/components/ui/typography";
 import { AttendanceSessionItem } from "@/features/attendance/components/attendance-session-item";
 import { AttendanceStatusBadge } from "@/features/attendance/components/attendance-status-badge";
 import { AttendanceTotalTime } from "@/features/attendance/components/attendance-total-time";
@@ -41,13 +42,23 @@ export function AdminAttendanceTable({
         <table className="w-full caption-bottom text-sm min-w-[1050px] border-collapse">
           <TableHeader className="bg-muted sticky top-0 z-20 border-b">
             <TableRow className="hover:bg-transparent border-b">
-              <TableHead className="w-[100px] py-4 font-bold text-foreground sticky left-0 bg-muted z-20 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Mã NV</TableHead>
-              <TableHead className="w-[150px] font-bold text-foreground">Nhân viên</TableHead>
-              <TableHead className="w-[120px] font-bold text-foreground text-center">Số ca</TableHead>
-              <TableHead className="w-[300px] font-bold text-foreground text-center">Chi tiết các ca làm việc</TableHead>
-              <TableHead className="w-[150px] font-bold text-foreground text-center whitespace-nowrap">Tổng thời gian làm việc</TableHead>
-              <TableHead className="w-[140px] text-center font-bold text-foreground py-4">
-                Trạng thái
+              <TableHead className="w-[100px] py-4 sticky left-0 bg-muted z-20 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
+                <Typography as="span" variant="body-sm" className="font-bold text-foreground">Mã NV</Typography>
+              </TableHead>
+              <TableHead className="w-[150px]">
+                <Typography as="span" variant="body-sm" className="font-bold text-foreground">Nhân viên</Typography>
+              </TableHead>
+              <TableHead className="w-[120px] text-center">
+                <Typography as="span" variant="body-sm" className="font-bold text-foreground">Số ca</Typography>
+              </TableHead>
+              <TableHead className="w-[300px] text-center">
+                <Typography as="span" variant="body-sm" className="font-bold text-foreground">Chi tiết các ca làm việc</Typography>
+              </TableHead>
+              <TableHead className="w-[150px] text-center whitespace-nowrap">
+                <Typography as="span" variant="body-sm" className="font-bold text-foreground">Tổng thời gian làm việc</Typography>
+              </TableHead>
+              <TableHead className="w-[140px] text-center py-4">
+                <Typography as="span" variant="body-sm" className="font-bold text-foreground">Trạng thái</Typography>
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -79,8 +90,8 @@ export function AdminAttendanceTable({
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span className="font-semibold text-foreground">{record.employeeName}</span>
-                        <span className="text-xs text-muted-foreground">{record.employeeEmail}</span>
+                        <Typography as="span" variant="body-sm" className="font-semibold text-foreground">{record.employeeName}</Typography>
+                        <Typography as="span" variant="helper" className="text-muted-foreground">{record.employeeEmail}</Typography>
                       </div>
                     </TableCell>
                     <TableCell className="py-4 text-center">

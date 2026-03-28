@@ -21,6 +21,7 @@ import {
 import { useDetailEmployee } from "../hooks/use-detail-employee";
 import { formatDate } from "@/utils/date";
 import { Separator } from "@/components/ui/separator";
+import { Typography } from "@/components/ui/typography";
 
 import { useEmployeeModalStore } from "../stores/employee-modal";
 
@@ -49,12 +50,12 @@ export function EmployeeDetailModal() {
               </span>
             </div>
             <div className="pb-1">
-              <DialogTitle className="text-xl font-bold text-primary-foreground drop-shadow-md">
+              <DialogTitle className="typo-h3 text-primary-foreground drop-shadow-md pb-0.5">
                 {employee?.name || "Thông tin nhân viên"}
               </DialogTitle>
-              <p className="text-primary-foreground/80 text-xs font-semibold uppercase tracking-widest mt-1">
+              <Typography as="span" variant="label-caps" className="text-primary-foreground/80 mt-1">
                 {employee?.role || "Staff"}
-              </p>
+              </Typography>
             </div>
           </DialogHeader>
         </div>
@@ -63,7 +64,7 @@ export function EmployeeDetailModal() {
           {isLoading ? (
             <div className="py-20 flex flex-col items-center justify-center gap-4">
               <Loader2 className="h-10 w-10 animate-spin text-primary/60" />
-              <p className="text-sm text-muted-foreground animate-pulse">Đang truy xuất dữ liệu...</p>
+              <Typography variant="body-sm" className="text-muted-foreground animate-pulse">Đang truy xuất dữ liệu...</Typography>
             </div>
           ) : employee ? (
             <div className="space-y-6">
@@ -78,9 +79,9 @@ export function EmployeeDetailModal() {
                   icon={<Briefcase className="h-4 w-4" />} 
                   label="Vai trò" 
                   value={
-                    <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary border border-primary/20">
+                    <Typography as="span" variant="label-caps" className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-primary border border-primary/20">
                       {employee.role}
-                    </span>
+                    </Typography>
                   } 
                 />
               </div>
@@ -89,7 +90,7 @@ export function EmployeeDetailModal() {
 
               {/* Section: Liên hệ */}
               <div className="space-y-4">
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Thông tin liên lạc</h4>
+                <Typography as="h4" variant="label-caps" className="text-muted-foreground/70">Thông tin liên lạc</Typography>
                 <div className="grid gap-4">
                   <InfoItem 
                     icon={<Mail className="h-4 w-4" />} 
@@ -113,13 +114,13 @@ export function EmployeeDetailModal() {
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-muted-foreground font-medium uppercase">Ngày gia nhập</p>
-                    <p className="text-sm font-semibold">{formatDate(employee.createdAt)}</p>
+                    <Typography variant="label-caps" className="text-muted-foreground">Ngày gia nhập</Typography>
+                    <Typography variant="body-sm" className="font-semibold">{formatDate(employee.createdAt)}</Typography>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 px-3 py-1 bg-success/10 text-success rounded-full">
                   <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-                  <span className="text-[10px] font-bold uppercase">Đang hoạt động</span>
+                  <Typography as="span" variant="label-caps">Đang hoạt động</Typography>
                 </div>
               </div>
             </div>
@@ -128,7 +129,7 @@ export function EmployeeDetailModal() {
               <div className="inline-flex p-4 rounded-full bg-destructive/10 text-destructive mb-4">
                 <ShieldCheck className="h-8 w-8" />
               </div>
-              <p className="text-sm text-muted-foreground">Không tìm thấy dữ liệu nhân viên.</p>
+              <Typography as="p" variant="body-sm" className="text-muted-foreground">Không tìm thấy dữ liệu nhân viên.</Typography>
             </div>
           )}
         </div>
@@ -144,12 +145,12 @@ function InfoItem({ icon, label, value }: { icon: React.ReactNode, label: string
         {icon}
       </div>
       <div>
-        <Label className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">
+        <Typography as="label" variant="label-caps" className="text-muted-foreground tracking-wider">
           {label}
-        </Label>
-        <div className="text-sm font-medium text-foreground mt-0.5">
+        </Typography>
+        <Typography variant="body-sm" className="mt-0.5">
           {value}
-        </div>
+        </Typography>
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ import {
   updateEmployeeSchema, 
 } from "../schema/employee";
 import { Employee, CreateEmployeeFormValues, EmployeeFormValues } from "../types/employees";
+import { Typography } from "@/components/ui/typography";
 
 import { useEmployeeModalStore } from "../stores/employee-modal";
 
@@ -107,7 +108,7 @@ export function EmployeeFormModal({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onOpenChange()}>
       <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
-          <DialogTitle className="text-2xl text-center">
+          <DialogTitle className="typo-h3 text-center">
             {isUpdate ? "Cập nhật nhân viên" : "Tạo tài khoản nhân viên"}
           </DialogTitle>
           <DialogDescription className="text-center">
@@ -124,7 +125,7 @@ export function EmployeeFormModal({
               </Label>
               <Input id="name" placeholder="Nguyễn Văn A" {...register("name")} />
               {errors.name && (
-                <p className="text-xs text-destructive">{errors.name.message}</p>
+                <Typography as="p" variant="caption" className="text-destructive">{errors.name.message}</Typography>
               )}
             </div>
             <div className="flex flex-col gap-2">
@@ -139,7 +140,7 @@ export function EmployeeFormModal({
                 disabled={isUpdate} 
               />
               {errors.email && (
-                <p className="text-xs text-destructive">{errors.email.message}</p>
+                <Typography as="p" variant="caption" className="text-destructive">{errors.email.message}</Typography>
               )}
             </div>
             {!isUpdate && (
@@ -154,7 +155,7 @@ export function EmployeeFormModal({
                   {...register("password")}
                 />
                 {errors.password && (
-                  <p className="text-xs text-destructive">{errors.password.message}</p>
+                  <Typography as="p" variant="caption" className="text-destructive">{errors.password.message}</Typography>
                 )}
               </div>
             )}
@@ -167,7 +168,7 @@ export function EmployeeFormModal({
                 {...register("phone")}
               />
               {errors.phone && (
-                <p className="text-xs text-destructive">{errors.phone.message}</p>
+                <Typography as="p" variant="caption" className="text-destructive">{errors.phone.message}</Typography>
               )}
             </div>
           </div>

@@ -17,6 +17,7 @@ import { AttendanceTable } from "./attendance-table";
 import { getAvailableMonths } from "../utils/attendance";
 import { useMyAttendance } from "@/features/attendance/hooks/use-attendance";
 import { mapAttendanceList } from "@/features/attendance/mapper/attendance";
+import { Typography } from "@/components/ui/typography";
 
 export function AttendanceDashboard() {
   const user = useAuthStore((state) => state.user);
@@ -70,13 +71,13 @@ export function AttendanceDashboard() {
       {/* Monthly Summary */}
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <h3 className="text-lg font-bold flex items-center gap-2">
+          <Typography as="h3" variant="h3" className="flex items-center gap-2">
             Tổng quan
-          </h3>
+          </Typography>
           <div className="flex items-center gap-2 bg-muted/50 p-1.5 rounded-lg border border-border/50">
             <label
               htmlFor="month-select"
-              className="text-xs font-semibold text-muted-foreground/80 whitespace-nowrap px-1"
+              className="typo-label-caps text-muted-foreground/80 whitespace-nowrap px-1"
             >
               THÁNG:
             </label>
@@ -140,12 +141,12 @@ export function AttendanceDashboard() {
                 <item.icon className={cn("size-5", item.color)} />
               </div>
               <div className="flex flex-col">
-                <span className="text-2xl font-black tracking-tight text-foreground">
+                <Typography as="span" variant="h2" className="tracking-tight text-foreground">
                   {item.value}
-                </span>
-                <span className="text-[11px] text-muted-foreground font-bold uppercase tracking-widest mt-0.5">
+                </Typography>
+                <Typography as="span" variant="label-caps" className="text-muted-foreground mt-0.5">
                   {item.label}
-                </span>
+                </Typography>
               </div>
               <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-10 transition-opacity">
                 <item.icon className="size-12" />
