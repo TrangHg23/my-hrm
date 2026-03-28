@@ -31,7 +31,7 @@ export default function EmployeeLayout({
     }
 
     if (user.role !== UserRole.EMPLOYEE) {
-      router.replace("/admin");
+      router.replace("/admin/employees");
     }
   }, [user, hasHydrated, router]);
 

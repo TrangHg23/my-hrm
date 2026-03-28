@@ -21,9 +21,9 @@ export const useLogin = () => {
       const role = data.user.role;
 
       if (role === UserRole.ADMIN) {
-        router.replace("/admin");
+        router.replace("/admin/employees");
       } else {
-        router.replace("/employee");
+        router.replace("/employee/attendance");
       }
     },
     

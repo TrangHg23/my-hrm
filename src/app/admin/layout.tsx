@@ -31,7 +31,7 @@ export default function AdminLayout({
     }
 
     if (user.role !== UserRole.ADMIN) {
-      router.replace("/employee");
+      router.replace("/employee/attendance");
     }
   }, [user, hasHydrated, router]);
 

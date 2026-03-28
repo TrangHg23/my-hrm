@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuthStore } from "@/features/auth/stores/auth";
-import { useLogout } from "@/features/auth/hooks/useLogout";
+import { useLogout } from "@/features/auth/hooks/use-logout";
 
 export function EmployeeSidebar({
   ...props

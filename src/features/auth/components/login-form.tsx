@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoginFormValues, loginSchema } from "@/features/auth/schema/auth";
-import { useLogin } from "../hooks/useLogin";
+import { useLogin } from "../hooks/use-login";
 
 export function LoginForm() {
   const { mutate, isPending } = useLogin();
