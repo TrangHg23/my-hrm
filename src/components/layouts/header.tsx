@@ -1,9 +1,6 @@
 "use client";
 
 import React from "react";
-import { useAuthStore } from "@/features/auth/stores/auth";
-import { UserRole } from "@/enums/user";
-import { GreetingHeader } from "./greeting-header";
 import { AttendanceCard } from "@/features/attendance/components/attendance-card";
 
 interface HeaderProps {
@@ -11,18 +8,11 @@ interface HeaderProps {
 }
 
 export function Header({ subtitle }: HeaderProps) {
-  const user = useAuthStore((state) => state.user);
-  const isEmployee = user?.role === UserRole.EMPLOYEE;
-
   return (
-    <div className="space-y-4">
-      <GreetingHeader 
-        name={user?.name} 
-        fallbackName={isEmployee ? "Nhân viên" : "Admin"} 
-        subtitle={subtitle}
-      />
-
-      {isEmployee && <AttendanceCard />}
+    <div className="sticky top-0 z-50 bg-background pt-4 -mx-4 px-4">
+      <div className="space-y-4">
+        <AttendanceCard subtitle={subtitle} />
+      </div>
     </div>
   );
 }

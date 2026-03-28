@@ -8,8 +8,17 @@ import { formatVietnameseDate, getVNDateKey } from "@/utils/date";
 import { useCheckInCheckOut } from "@/features/attendance/hooks/use-checkin-checkout";
 import { useMyAttendance } from "@/features/attendance/hooks/use-attendance";
 import { LeaveRequestModal } from "@/features/leave/components/leave-request-modal";
+import { useAuthStore } from "@/features/auth/stores/auth";
+import { UserRole } from "@/enums/user";
+import { GreetingHeader } from "@/components/layouts/greeting-header";
 
-export function AttendanceCard() {
+interface AttendanceCardProps {
+  subtitle?: React.ReactNode;
+}
+
+export function AttendanceCard({ subtitle }: AttendanceCardProps = {}) {
+  const user = useAuthStore((state) => state.user);
+  const isEmployee = user?.role === UserRole.EMPLOYEE;
   const today = useMemo(() => new Date(), []);
   
   const [isCheckedIn, setIsCheckedIn] = useState(false);
@@ -61,48 +70,68 @@ export function AttendanceCard() {
 
   return (
     <div className="bg-card rounded-xl border p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div className="flex flex-col gap-1.5">
-        <div className="flex items-center gap-2 text-lg font-semibold text-foreground">
-          <Calendar className="size-5 text-primary" />
-          <span>{capitalizedDate}</span>
+      {!isEmployee ? (
+        <div className="flex items-start text-left min-w-0 flex-1">
+          <GreetingHeader name={user?.name} fallbackName="Admin" subtitle={subtitle} />
         </div>
-        <p className="text-sm text-muted-foreground">
-          Sẵn sàng để bắt đầu một ngày làm việc hiệu quả!
-        </p>
-      </div>
+      ) : (
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center gap-2 text-lg font-semibold text-foreground">
+            <Calendar className="size-5 text-primary" />
+            <span>{capitalizedDate}</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Sẵn sàng để bắt đầu một ngày làm việc hiệu quả!
+          </p>
+        </div>
+      )}
 
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
-        <button
-          onClick={handleCheckInOut}
-          disabled={isUpdatingAttendance}
-          className={cn(
-            "h-11 px-8 group relative overflow-hidden text-primary-foreground rounded-lg transition-all hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2 w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed",
-            isCheckedIn
-              ? "bg-orange-500 hover:bg-orange-600"
-              : "bg-primary hover:bg-primary/90",
-          )}
-        >
-          <span className="relative z-10 font-bold uppercase tracking-wide">
-            {isUpdatingAttendance
-              ? "Đang xử lý..."
-              : isCheckedIn
-                ? "Check-Out Ngay"
-                : "Check-In Ngay"}
-          </span>
-          {!isUpdatingAttendance && (
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-          )}
-        </button>
+        {!isEmployee ? (
+          <div className="flex flex-col gap-1.5 md:items-end w-full">
+            <div className="flex items-center justify-start md:justify-end gap-2 text-lg font-semibold text-foreground">
+              <Calendar className="size-5 text-primary" />
+              <span>{capitalizedDate}</span>
+            </div>
+            <p className="text-sm text-muted-foreground md:text-right">
+              Sẵn sàng để bắt đầu một ngày làm việc hiệu quả!
+            </p>
+          </div>
+        ) : (
+          <>
+            <button
+              onClick={handleCheckInOut}
+              disabled={isUpdatingAttendance}
+              className={cn(
+                "h-11 px-8 group relative overflow-hidden text-primary-foreground rounded-lg transition-all hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2 w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed",
+                isCheckedIn
+                  ? "bg-orange-500 hover:bg-orange-600"
+                  : "bg-primary hover:bg-primary/90",
+              )}
+            >
+              <span className="relative z-10 font-bold uppercase tracking-wide">
+                {isUpdatingAttendance
+                  ? "Đang xử lý..."
+                  : isCheckedIn
+                    ? "Check-Out Ngay"
+                    : "Check-In Ngay"}
+              </span>
+              {!isUpdatingAttendance && (
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+              )}
+            </button>
 
-        <LeaveRequestModal>
-          <Button
-            variant="outline"
-            className="h-11 px-6 rounded-lg border-dashed hover:border-primary hover:bg-primary/5 hover:text-primary transition-all gap-2 w-full sm:w-auto"
-          >
-            <Plus className="size-4" />
-            <span className="font-bold">Tạo đơn</span>
-          </Button>
-        </LeaveRequestModal>
+            <LeaveRequestModal>
+              <Button
+                variant="outline"
+                className="h-11 px-6 rounded-lg border-dashed hover:border-primary hover:bg-primary/5 hover:text-primary transition-all gap-2 w-full sm:w-auto"
+              >
+                <Plus className="size-4" />
+                <span className="font-bold">Tạo đơn</span>
+              </Button>
+            </LeaveRequestModal>
+          </>
+        )}
       </div>
     </div>
   );
