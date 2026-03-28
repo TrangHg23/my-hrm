@@ -100,7 +100,7 @@ export function AdminAttendanceTable({
                       </span>
                     </TableCell>
                     <TableCell className="py-3 px-4">
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 max-w-[420px] mx-auto">
+                      <div className="flex flex-wrap items-center justify-center gap-2 max-w-[420px] mx-auto">
                         {record.sessions.length > 0 ? (
                           record.sessions.map((s: AdminWorkSession, idx: number) => (
                             <AttendanceSessionItem
