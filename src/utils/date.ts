@@ -57,6 +57,16 @@ export const getVNDateKey = (date: Date | string | number): string => {
 
 export const formatTimeVN = (date: Date | string | null | undefined): string => {
   if (!date) return "---";
+  
+  if (typeof date === 'string') {
+    // If it's already a time string like "13:00" or "13:00:00", just return the HH:mm part
+    const timeRegex = /^(\d{2}:\d{2})(:\d{2})?$/;
+    const match = date.match(timeRegex);
+    if (match) {
+      return match[1];
+    }
+  }
+
   try {
     const d = new Date(date);
     if (isNaN(d.getTime())) return "---";
