@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="vi" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased bg-background text-foreground overflow-y-scroll`}
       >
          <ReactQueryProvider>
           {children}

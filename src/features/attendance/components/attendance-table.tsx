@@ -124,7 +124,7 @@ export function AttendanceTable({ data }: AttendanceTableProps) {
                           </TableCell>
 
                           <TableCell className="py-3 px-4">
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full max-w-[420px] mx-auto">
+                            <div className="flex flex-wrap items-center justify-center gap-2 max-w-[420px] mx-auto">
                               {row.sessions.length > 0 ? (
                                 row.sessions.map((s: WorkSession, idx: number) => (
                                   <AttendanceSessionItem

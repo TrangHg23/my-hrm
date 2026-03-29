@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoginFormValues, loginSchema } from "@/features/auth/schema/auth";
-import { useLogin } from "../hooks/useLogin";
+import { useLogin } from "../hooks/use-login";
+import { Typography } from "@/components/ui/typography";
 
 export function LoginForm() {
   const { mutate, isPending } = useLogin();
@@ -42,7 +43,7 @@ export function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem className="space-y-1 gap-0">
-              <FormLabel className="text-sm font-medium ml-1 text-foreground/80">
+              <FormLabel className="typo-label-md ml-1 text-foreground/80">
                 Email
               </FormLabel>
               <FormControl>
@@ -59,7 +60,7 @@ export function LoginForm() {
               </FormControl>
 
               <div className="h-5 ml-1">
-                <FormMessage className="text-[12px] font-medium leading-5" />
+                <FormMessage className="typo-caption" />
               </div>
             </FormItem>
           )}
@@ -70,7 +71,7 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem className="space-y-1 gap-0">
-              <FormLabel className="text-sm font-medium ml-1 text-foreground/80">
+              <FormLabel className="typo-label-md ml-1 text-foreground/80">
                 Mật khẩu
               </FormLabel>
               <FormControl>
@@ -87,7 +88,7 @@ export function LoginForm() {
                 </div>
               </FormControl>
               <div className="h-5 ml-1">
-                <FormMessage className="text-[12px] font-medium leading-5" />
+                <FormMessage className="typo-caption" />
               </div>
             </FormItem>
           )}
@@ -101,7 +102,7 @@ export function LoginForm() {
           {isLoading ? (
             <div className="flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Đang xử lý...</span>
+              <Typography as="span" variant="body-sm" className="font-bold">Đang xử lý...</Typography>
             </div>
           ) : (
             "Đăng nhập hệ thống"

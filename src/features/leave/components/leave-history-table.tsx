@@ -141,20 +141,20 @@ export function LeaveHistoryTable({
                       ) : (
                         <div className="flex flex-col border-l-2 border-primary/30 pl-2 py-0.5">
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-bold text-slate-400 w-6 uppercase">
+                            <Typography as="span" variant="label-caps" className="text-slate-400 w-6 uppercase">
                               Từ
-                            </span>
-                            <span className="text-sm font-bold text-slate-700 whitespace-nowrap">
+                            </Typography>
+                            <Typography as="span" variant="body-sm" className="font-bold text-slate-700 whitespace-nowrap">
                               {formatDate(request.fromDate)}
-                            </span>
+                            </Typography>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-bold text-slate-400 w-6 uppercase">
+                            <Typography as="span" variant="label-caps" className="text-slate-400 w-6 uppercase">
                               Đến
-                            </span>
-                            <span className="text-sm font-bold text-slate-700 whitespace-nowrap">
+                            </Typography>
+                            <Typography as="span" variant="body-sm" className="font-bold text-slate-700 whitespace-nowrap">
                               {formatDate(request.toDate)}
-                            </span>
+                            </Typography>
                           </div>
                         </div>
                       )}
@@ -228,12 +228,12 @@ export function LeaveHistoryTable({
                                 className="bg-amber-50 border border-amber-200 text-amber-950 p-3 shadow-xl max-w-64"
                               >
                                 <div className="space-y-1">
-                                  <p className="typo-label-caps text-amber-600 text-[10px]">
+                                  <Typography variant="label-caps" className="text-amber-600">
                                     Phản hồi từ Admin:
-                                  </p>
-                                  <p className="text-sm leading-relaxed">
+                                  </Typography>
+                                  <Typography variant="body-sm" className="leading-relaxed">
                                     {request.rejectReason}
-                                  </p>
+                                  </Typography>
                                 </div>
                                 <TooltipArrow className="fill-amber-50 stroke-amber-200" />
                               </TooltipContent>

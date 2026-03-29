@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { GreetingHeader } from "@/components/ui/greeting-header";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/features/auth/stores/auth";
 import { Search } from "lucide-react";
@@ -40,11 +39,6 @@ export function AdminAttendanceDashboard() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto w-full animate-in fade-in duration-500 overflow-hidden">
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 px-1">
-        <GreetingHeader
-          name={user?.name}
-          fallbackName="Admin"
-          subtitle="Theo dõi và quản lý dữ liệu chấm công của toàn bộ nhân viên."
-        />
 
         {/* Filters and Actions */}
         <div className="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto mt-4 lg:mt-0 shrink-0">

@@ -177,16 +177,16 @@ export function LeaveManagementTable({
                     ) : (
                       <div className="flex flex-col border-l-2 border-primary/30 pl-2 py-0.5">
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-slate-400 w-6 uppercase">Từ</span>
-                          <span className="text-sm font-bold text-slate-700 whitespace-nowrap">
+                          <Typography as="span" variant="label-caps" className="text-slate-400 w-6 uppercase">Từ</Typography>
+                          <Typography as="span" variant="body-sm" className="font-bold text-slate-700 whitespace-nowrap">
                             {formatDate(request.fromDate)}
-                          </span>
+                          </Typography>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-slate-400 w-6 uppercase">Đến</span>
-                          <span className="text-sm font-bold text-slate-700 whitespace-nowrap">
+                          <Typography as="span" variant="label-caps" className="text-slate-400 w-6 uppercase">Đến</Typography>
+                          <Typography as="span" variant="body-sm" className="font-bold text-slate-700 whitespace-nowrap">
                             {formatDate(request.toDate)}
-                          </span>
+                          </Typography>
                         </div>
                       </div>
                     )}
@@ -244,10 +244,7 @@ export function LeaveManagementTable({
                               <TooltipTrigger asChild>
                                 <span className="flex items-center gap-1 text-rose-500 hover:text-rose-600 cursor-help transition-colors">
                                   <Info className="size-3" />
-                                  <Typography
-                                    variant="helper"
-                                    className="font-bold text-inherit uppercase tracking-wider text-[10px]"
-                                  >
+                                  <Typography as="span" variant="label-caps" className="font-bold text-inherit uppercase text-[10px]">
                                     Lý do từ chối
                                   </Typography>
                                 </span>

@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { EmployeeSidebar } from "@/features/employee/components/employee-sidebar";
+import { EmployeeSidebar } from "@/components/layouts/employee-sidebar";
+import { Header } from "@/components/layouts/header";
 
 export default function EmployeeLayout({
   children,
@@ -30,7 +31,7 @@ export default function EmployeeLayout({
     }
 
     if (user.role !== UserRole.EMPLOYEE) {
-      router.replace("/admin");
+      router.replace("/admin/employees");
     }
   }, [user, hasHydrated, router]);
 
@@ -42,7 +43,7 @@ export default function EmployeeLayout({
       <div className="flex min-h-screen w-full">
         <EmployeeSidebar />
 
-        <main className="flex-1 w-full flex flex-col min-w-0 overflow-hidden">
+        <main className="flex-1 w-full flex flex-col min-w-0">
           <div className="flex w-full h-16 items-center justify-between border-b px-4 md:hidden">
             <div className="flex items-center gap-2">
               <div className="size-8 flex items-center justify-center shrink-0">
@@ -54,7 +55,8 @@ export default function EmployeeLayout({
             </div>
             <SidebarTrigger />
           </div>
-          <div className="p-4">
+          <div className="p-4 space-y-4 max-w-7xl mx-auto w-full">
+            <Header />
             {children}
           </div>
         </main>

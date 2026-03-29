@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { Typography } from "@/components/ui/typography";
 
 interface AttendanceTotalTimeProps {
   hours: string;
@@ -8,7 +9,7 @@ interface AttendanceTotalTimeProps {
 
 export function AttendanceTotalTime({ hours, variant = "default", className }: AttendanceTotalTimeProps) {
   if (!hours || hours === "---" || hours === "0h" || hours === "00 giờ 00 phút") {
-    return <span className="text-muted-foreground/30 font-bold tabular-nums">---</span>;
+    return <Typography as="span" variant="body-sm" className="text-muted-foreground/30 font-bold tabular-nums">---</Typography>;
   }
 
   const hMatch = hours.match(/(\d+)\s*(?:h|giờ)/i);
@@ -20,12 +21,12 @@ export function AttendanceTotalTime({ hours, variant = "default", className }: A
   if (variant === "compact") {
     const decimalHours = (parseInt(h) + parseInt(p) / 60).toFixed(1).replace(".0", "");
     return (
-      <span className={cn(
-        "inline-flex items-center px-2 py-1 rounded bg-muted text-muted-foreground font-bold tabular-nums text-xs border border-border",
+      <Typography as="span" variant="caption" className={cn(
+        "inline-flex items-center px-2 py-1 rounded bg-muted text-muted-foreground font-bold tabular-nums border border-border",
         className
       )}>
         {decimalHours}h
-      </span>
+      </Typography>
     );
   }
 
@@ -35,19 +36,19 @@ export function AttendanceTotalTime({ hours, variant = "default", className }: A
       className
     )}>
       <div className="flex items-center gap-1.5 shrink-0">
-        <span className="font-bold tabular-nums text-[13px] sm:text-[14px]">
+        <Typography as="span" variant="body-sm" className="font-bold tabular-nums">
           {h.padStart(2, '0')}
-        </span>
-        <span className="text-[10px] sm:text-[12px] font-medium opacity-80 lowercase">giờ</span>
+        </Typography>
+        <Typography as="span" variant="caption" className="font-medium opacity-80 lowercase">giờ</Typography>
       </div>
       
       <div className="hidden sm:block w-px h-3 bg-primary/20 mx-0.5" />
 
       <div className="flex items-center gap-1.5 shrink-0">
-        <span className="font-bold tabular-nums text-[13px] sm:text-[14px]">
+        <Typography as="span" variant="body-sm" className="font-bold tabular-nums">
           {p.padStart(2, '0')}
-        </span>
-        <span className="text-[10px] sm:text-[12px] font-medium opacity-80 lowercase">phút</span>
+        </Typography>
+        <Typography as="span" variant="caption" className="font-medium opacity-80 lowercase">phút</Typography>
       </div>
     </div>
   );
