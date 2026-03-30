@@ -1,0 +1,67 @@
+"use client";
+
+import { useState } from "react";
+import { Search, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useGetEmployees } from "../hooks/use-get-employees";
+import { useEmployeeModalStore } from "../stores/employee-modal";
+import { EmployeeFormModal } from "./employee-form-modal";
+import { EmployeeDetailModal } from "./employee-detail-modal";
+import { EmployeeManagementTable } from "./employee-management-table";
+
+export function EmployeeManagementDashboard() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  
+  const { openCreateForm, formMode } = useEmployeeModalStore();
+
+  const { data, isLoading } = useGetEmployees(currentPage, itemsPerPage);
+
+  const employees = data?.data || [];
+  const totalPages = data?.meta.totalPages || 1;
+  const totalItems = data?.meta.total || 0;
+
+  return (
+    <div className="space-y-6 max-w-7xl mx-auto w-full animate-in fade-in duration-500">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4"><div />
+
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto mt-4 lg:mt-0 shrink-0">
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Tìm kiếm nhân viên..."
+              className="w-full pl-8 bg-background"
+            />
+          </div>
+
+          <Button className="w-full sm:w-auto shrink-0 gap-1" onClick={openCreateForm}>
+            <Plus className="h-4 w-4" />
+            Thêm nhân viên
+          </Button>
+        </div>
+      </div>
+
+      <EmployeeDetailModal />
+
+      <EmployeeFormModal
+        onSuccess={() => {
+          if (formMode === "create") {
+            setCurrentPage(1);
+          }
+        }}
+      />
+
+      <EmployeeManagementTable
+        data={employees}
+        isLoading={isLoading}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalItems}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+      />
+    </div>
+  );
+}
