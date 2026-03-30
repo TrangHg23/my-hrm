@@ -63,7 +63,6 @@ export function EmployeeFormModal({ onSuccess }: { onSuccess?: () => void }) {
           name: employee.name,
           email: employee.email,
           phone: employee.phone || "",
-          password: "",
         });
       } else {
         form.reset({
@@ -97,10 +96,10 @@ export function EmployeeFormModal({ onSuccess }: { onSuccess?: () => void }) {
 
   const onSubmit = (values: EmployeeFormValues) => {
     if (isUpdate && employee) {
-      const payload: any = { ...values };
-      if (!payload.password) delete payload.password;
+      const { password, ...payload } = values;
+      const finalPayload = password ? values : payload;
 
-      updateMutation({ id: employee.id, data: payload });
+      updateMutation({ id: employee.id, data: finalPayload as any });
     } else {
       createMutation(values as CreateEmployeeFormValues);
     }
