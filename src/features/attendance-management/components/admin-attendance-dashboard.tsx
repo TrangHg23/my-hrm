@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
-import { useAuthStore } from "@/features/auth/stores/auth";
 import { Search } from "lucide-react";
 import { AdminAttendanceTable } from "./admin-attendance-table";
 import { getVNDateKey } from "@/utils/date";
@@ -10,7 +9,6 @@ import { useAttendanceManagement } from "../hooks/use-attendance-management";
 import { mapAdminAttendanceList } from "../mapper/attendance-management";
 
 export function AdminAttendanceDashboard() {
-  const user = useAuthStore((state) => state.user);
   const [selectedDate, setSelectedDate] = useState<string>(
     getVNDateKey(new Date()),
   );

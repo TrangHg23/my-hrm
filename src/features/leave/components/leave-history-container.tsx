@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useAuthStore } from "@/features/auth/stores/auth";
 import { LeaveHistoryTable } from "./leave-history-table";
 import { useGetMyLeaveRequests } from "../hooks/use-get-my-leave-requests";
 
 export function LeaveHistoryContainer() {
-  const user = useAuthStore((state) => state.user);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
 
