@@ -16,7 +16,7 @@ export const useLogin = () => {
 
     onSuccess: (data) => {
       toast.success("Đăng nhập thành công!");
-      login(data.user, data.accessToken);
+      login(data.user);
 
       const role = data.user.role;
 

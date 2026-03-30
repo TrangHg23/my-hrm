@@ -8,11 +8,7 @@ export const useLogout = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: () => {
-      const token = useAuthStore.getState().accessToken;
-      if (!token) return Promise.resolve(null);
-      return logoutApi(token);
-    },
+    mutationFn: () => logoutApi(),
     onSettled: () => {
       logout();
       useAuthStore.persist.clearStorage(); 
