@@ -31,4 +31,3 @@ eslint.config.mjs
 /task*.md
 /walkthrough*.md
 next-env.d.ts
-postcss.config.mjs
