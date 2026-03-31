@@ -1,0 +1,15 @@
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        # Build-time environment variables for Next.js
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3086}
+    container_name: my-hrm-fe
+    restart: always
+    ports:
+      - '3200:3000'
+    environment:
+      # Runtime environment variables if needed
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3086}
+      PORT: 3000
