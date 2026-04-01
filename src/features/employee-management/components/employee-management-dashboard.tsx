@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useDebounce } from "@/hooks/use-debounce";
 import { useGetEmployees } from "../hooks/use-get-employees";
 import { useEmployeeModalStore } from "../stores/employee-modal";
 import { EmployeeFormModal } from "./employee-form-modal";
@@ -12,11 +13,21 @@ import { EmployeeManagementTable } from "./employee-management-table";
 
 export function EmployeeManagementDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const itemsPerPage = 10;
   
   const { openCreateForm, formMode } = useEmployeeModalStore();
 
-  const { data, isLoading } = useGetEmployees(currentPage, itemsPerPage);
+  const { data, isLoading } = useGetEmployees({
+    page: currentPage,
+    limit: itemsPerPage,
+    q: debouncedSearchQuery,
+  });
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchQuery]);
 
   const employees = data?.data || [];
   const totalPages = data?.meta.totalPages || 1;
@@ -33,6 +44,8 @@ export function EmployeeManagementDashboard() {
               type="search"
               placeholder="Tìm kiếm nhân viên..."
               className="w-full pl-8 bg-background"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
