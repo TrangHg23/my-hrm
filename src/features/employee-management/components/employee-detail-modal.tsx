@@ -72,7 +72,7 @@ export function EmployeeDetailModal() {
                 <InfoItem 
                   icon={<Fingerprint className="h-4 w-4" />} 
                   label="Mã nhân viên" 
-                  value={`#${employeeId?.split("-")[0].toUpperCase()}`} 
+                  value={employee.empCode} 
                 />
                 <InfoItem 
                   icon={<Briefcase className="h-4 w-4" />} 

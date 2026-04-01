@@ -13,9 +13,10 @@ import { Button } from "@/components/ui/button";
 import { formatDate } from "@/utils/date";
 import { useAuthStore } from "@/features/auth/stores/auth";
 import { useEmployeeModalStore } from "../stores/employee-modal";
+import { Employee } from "../types/employees";
 
 interface EmployeeManagementTableProps {
-  data: any[];
+  data: Employee[];
   isLoading: boolean;
   currentPage: number;
   totalPages: number;
@@ -79,7 +80,7 @@ export function EmployeeManagementTable({
                   className="group hover:bg-muted transition-colors"
                 >
                   <TableCell className="font-medium text-muted-foreground uppercase text-xs">
-                    {employee.id.split("-")[0]}
+                    {employee.empCode}
                   </TableCell>
                   <TableCell className="font-semibold text-foreground">
                     {employee.name}

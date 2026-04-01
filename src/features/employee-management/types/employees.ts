@@ -3,6 +3,7 @@ import z from "zod";
 
 export interface Employee {
   id: string;
+  empCode: string;
   email: string;
   role: string;
   name: string;
