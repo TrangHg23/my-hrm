@@ -37,7 +37,7 @@ export function AdminAttendanceTable({
 }: AdminAttendanceTableProps) {
 
   return (
-    <div className="rounded-xl border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-180px)] min-h-[450px] w-full max-w-full">
+    <div className="rounded-xl border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-210px)] min-h-[400px] w-full max-w-full">
       <div className="flex-1 overflow-auto relative custom-scrollbar">
         <table className="w-full caption-bottom text-sm min-w-[1050px] border-collapse">
           <TableHeader className="bg-muted sticky top-0 z-20 border-b">
