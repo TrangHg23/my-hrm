@@ -35,25 +35,22 @@ export function EmployeeManagementDashboard() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto w-full animate-in fade-in duration-500">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4"><div />
-
-        <div className="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto mt-4 lg:mt-0 shrink-0">
-          <div className="relative w-full sm:w-64">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Tìm kiếm nhân viên..."
-              className="w-full pl-8 bg-background"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          <Button className="w-full sm:w-auto shrink-0 gap-1" onClick={openCreateForm}>
-            <Plus className="h-4 w-4" />
-            Thêm nhân viên
-          </Button>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="relative w-full md:w-80">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Tìm kiếm nhân viên..."
+            className="w-full pl-8 bg-background"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
+
+        <Button className="w-full md:w-auto shrink-0 gap-1" onClick={openCreateForm}>
+          <Plus className="h-4 w-4" />
+          Thêm nhân viên
+        </Button>
       </div>
 
       <EmployeeDetailModal />

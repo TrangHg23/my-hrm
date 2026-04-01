@@ -43,7 +43,7 @@ export function AdminAttendanceTable({
           <TableHeader className="bg-muted sticky top-0 z-20 border-b">
             <TableRow className="hover:bg-transparent border-b">
               <TableHead className="w-[100px] py-4 sticky left-0 bg-muted z-20 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
-                <Typography as="span" variant="body-sm" className="font-bold text-foreground">Mã NV</Typography>
+                <Typography as="span" variant="body-sm" className="font-bold text-foreground">Mã nhân viên</Typography>
               </TableHead>
               <TableHead className="w-[150px]">
                 <Typography as="span" variant="body-sm" className="font-bold text-foreground">Nhân viên</Typography>
@@ -85,8 +85,8 @@ export function AdminAttendanceTable({
                     key={record.id}
                     className="group hover:bg-muted/50 transition-colors"
                   >
-                    <TableCell className="font-medium text-muted-foreground uppercase text-xs sticky left-0 bg-card group-hover:bg-muted transition-colors z-10 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
-                      {record.employeeId.split("-")[0]}
+                    <TableCell className="font-semibold text-muted-foreground uppercase text-xs sticky left-0 bg-card group-hover:bg-muted transition-colors z-10 before:absolute before:inset-y-0 before:right-0 before:w-px before:bg-border shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
+                      {record.employeeCode}
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">

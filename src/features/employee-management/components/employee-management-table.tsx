@@ -79,7 +79,7 @@ export function EmployeeManagementTable({
                   key={employee.id}
                   className="group hover:bg-muted transition-colors"
                 >
-                  <TableCell className="font-medium text-muted-foreground uppercase text-xs">
+                  <TableCell className="font-semibold text-muted-foreground uppercase text-xs">
                     {employee.empCode}
                   </TableCell>
                   <TableCell className="font-semibold text-foreground">

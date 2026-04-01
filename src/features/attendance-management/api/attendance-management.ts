@@ -7,6 +7,12 @@ import {
 export const getAllAttendanceApi = async (
   params: AttendanceQueryParams,
 ): Promise<AdminAttendanceApiResponse> => {
-  const response = await api.get("/attendance", { params });
+  const { q, ...rest } = params;
+  const response = await api.get("/attendance", {
+    params: {
+      ...rest,
+      ...(q ? { q } : {}),
+    },
+  });
   return response.data;
 };
