@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { formatDate } from "@/utils/date";
 import { useAuthStore } from "@/features/auth/stores/auth";
 import { useEmployeeModalStore } from "../stores/employee-modal";
+import { EmployeeStatusBadge } from "./employee-status-badge";
 import { Employee } from "../types/employees";
 
 interface EmployeeManagementTableProps {
@@ -52,6 +53,7 @@ export function EmployeeManagementTable({
                 Số điện thoại
               </TableHead>
               <TableHead className="font-bold text-foreground">Ngày tạo</TableHead>
+              <TableHead className="font-bold text-foreground">Trạng thái</TableHead>
               <TableHead className="font-bold text-foreground">Người tạo</TableHead>
               <TableHead className="text-right sticky right-0 bg-muted/95 backdrop-blur-sm z-20 w-32 font-bold before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">
                 Hành động
@@ -61,7 +63,7 @@ export function EmployeeManagementTable({
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={7} className="h-24 text-center">
+                <TableCell colSpan={8} className="h-24 text-center">
                   <div className="flex items-center justify-center">
                     <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                   </div>
@@ -69,7 +71,7 @@ export function EmployeeManagementTable({
               </TableRow>
             ) : data.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
+                <TableCell colSpan={8} className="h-24 text-center text-muted-foreground">
                   Không tìm thấy nhân viên nào.
                 </TableCell>
               </TableRow>
@@ -91,6 +93,9 @@ export function EmployeeManagementTable({
                   <TableCell>{employee.phone || "---"}</TableCell>
                   <TableCell className="text-muted-foreground">
                     {formatDate(employee.createdAt)}
+                  </TableCell>
+                  <TableCell>
+                    <EmployeeStatusBadge status={employee.status} />
                   </TableCell>
                   <TableCell>
                     <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-primary/10 text-primary border-primary/20">

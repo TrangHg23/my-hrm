@@ -2,9 +2,16 @@ import { createEmployeeSchema, updateEmployeeSchema } from "../schema/employee";
 import z from "zod";
 import { PaginatedQueryParams } from "@/types/query-params";
 
+export enum EmployeeStatus {
+  WORKING = "WORKING",
+  PROBATION = "PROBATION",
+  RESIGNED = "RESIGNED",
+}
+
 export interface Employee {
   id: string;
   empCode: string;
+  status: EmployeeStatus;
   email: string;
   role: string;
   name: string;
