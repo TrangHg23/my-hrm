@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { updateEmployee } from "../api/update-employee";
 import { CreateEmployeeFormValues } from "../types/employees";
 import { queryClient } from "@/lib/query-client";
+import { parseErrorMessage } from "@/utils/error";
 
 export const useUpdateEmployee = (onSuccessCallback?: () => void) => {
 
@@ -15,9 +16,7 @@ export const useUpdateEmployee = (onSuccessCallback?: () => void) => {
       onSuccessCallback?.();
     },
     onError: (error: any) => {
-      const errorMessage =
-        error.response?.data?.message || "Đã có lỗi xảy ra khi cập nhật nhân viên";
-      toast.error(errorMessage);
+      toast.error(parseErrorMessage(error));
     },
   });
 };

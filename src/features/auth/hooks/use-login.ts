@@ -5,6 +5,7 @@ import { LoginFormValues } from "@/features/auth/schema/auth";
 import { useRouter } from "next/navigation";
 import { UserRole } from "@/enums/user";
 import { toast } from "sonner";
+import { parseErrorMessage } from "@/utils/error";
 
 export const useLogin = () => {
   const login = useAuthStore((state) => state.login);
@@ -27,8 +28,8 @@ export const useLogin = () => {
       }
     },
     
-    onError: () => {
-      toast.error("Có lỗi xảy ra khi đăng nhập!");
+    onError: (error) => {
+      toast.error(parseErrorMessage(error));
     }
   });
 };
