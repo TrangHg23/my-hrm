@@ -38,7 +38,7 @@ export function EmployeeManagementTable({
   const { openUpdateForm, openDetail } = useEmployeeModalStore();
 
   return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-160px)] min-h-125">
+    <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-210px)] min-h-[400px]">
       <div className="flex-1 overflow-auto relative">
         <table className="w-full caption-bottom text-sm min-w-275 border-collapse">
           <TableHeader className="bg-muted sticky top-0 z-20 border-b">
@@ -79,7 +79,7 @@ export function EmployeeManagementTable({
                   key={employee.id}
                   className="group hover:bg-muted transition-colors"
                 >
-                  <TableCell className="font-medium text-muted-foreground uppercase text-xs">
+                  <TableCell className="font-semibold text-muted-foreground uppercase text-xs">
                     {employee.empCode}
                   </TableCell>
                   <TableCell className="font-semibold text-foreground">

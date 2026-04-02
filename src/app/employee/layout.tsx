@@ -55,7 +55,7 @@ export default function EmployeeLayout({
             </div>
             <SidebarTrigger />
           </div>
-          <div className="p-4 space-y-4 max-w-7xl mx-auto w-full">
+          <div className="px-4 pb-4 space-y-4 max-w-7xl mx-auto w-full">
             <Header />
             {children}
           </div>

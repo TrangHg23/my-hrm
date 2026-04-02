@@ -34,7 +34,7 @@ export function AttendanceTable({ data }: AttendanceTableProps) {
         </h2>
       </div>
 
-      <div className="rounded-xl border border-border bg-card shadow-md overflow-hidden flex flex-col h-175 w-full max-w-full">
+      <div className="rounded-xl border border-border bg-card shadow-md overflow-hidden flex flex-col h-[calc(100vh-200px)] min-h-[350px] w-full max-w-full">
         <div className="flex-1 overflow-auto custom-scrollbar text-[13px]">
           <table className="w-full border-collapse min-w-[950px]">
             <TableHeader className="bg-muted/50 sticky top-0 z-20 backdrop-blur-md border-b-2">

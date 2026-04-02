@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useDebounce } from "@/hooks/use-debounce";
 import { useGetEmployees } from "../hooks/use-get-employees";
 import { useEmployeeModalStore } from "../stores/employee-modal";
 import { EmployeeFormModal } from "./employee-form-modal";
@@ -12,11 +13,21 @@ import { EmployeeManagementTable } from "./employee-management-table";
 
 export function EmployeeManagementDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const itemsPerPage = 10;
   
   const { openCreateForm, formMode } = useEmployeeModalStore();
 
-  const { data, isLoading } = useGetEmployees(currentPage, itemsPerPage);
+  const { data, isLoading } = useGetEmployees({
+    page: currentPage,
+    limit: itemsPerPage,
+    q: debouncedSearchQuery,
+  });
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchQuery]);
 
   const employees = data?.data || [];
   const totalPages = data?.meta.totalPages || 1;
@@ -24,23 +35,22 @@ export function EmployeeManagementDashboard() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto w-full animate-in fade-in duration-500">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4"><div />
-
-        <div className="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto mt-4 lg:mt-0 shrink-0">
-          <div className="relative w-full sm:w-64">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Tìm kiếm nhân viên..."
-              className="w-full pl-8 bg-background"
-            />
-          </div>
-
-          <Button className="w-full sm:w-auto shrink-0 gap-1" onClick={openCreateForm}>
-            <Plus className="h-4 w-4" />
-            Thêm nhân viên
-          </Button>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="relative w-full md:w-80">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Tìm kiếm nhân viên..."
+            className="w-full pl-8 bg-background"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
+
+        <Button className="w-full md:w-auto shrink-0 gap-1" onClick={openCreateForm}>
+          <Plus className="h-4 w-4" />
+          Thêm nhân viên
+        </Button>
       </div>
 
       <EmployeeDetailModal />

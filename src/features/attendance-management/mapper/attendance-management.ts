@@ -24,6 +24,7 @@ export const mapAdminAttendanceList = (
       employeeId: record.user?.id || record.userId,
       employeeName: record.user?.name || "N/A",
       employeeEmail: record.user?.email || "N/A",
+      employeeCode: record.user?.empCode || "N/A",
       sessions,
       totalHours: totalHoursStr,
       status: record.status.toLowerCase() as "present" | "absent" | "leave",

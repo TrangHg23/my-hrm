@@ -1,10 +1,11 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getEmployees } from "@/features/employee-management/api/get-employees";
+import { EmployeeQueryParams } from "../types/employees";
 
-export const useGetEmployees = (page: number, limit: number = 10) => {
+export const useGetEmployees = (params: EmployeeQueryParams) => {
   return useQuery({
-    queryKey: ["employees", page, limit],
-    queryFn: () => getEmployees(page, limit),
+    queryKey: ["employees", params],
+    queryFn: () => getEmployees(params),
     placeholderData: keepPreviousData,
   });
 };
