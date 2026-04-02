@@ -17,6 +17,8 @@ import { useEmployeeModalStore } from "../stores/employee-modal";
 import { useToggleEmployeeActive } from "../hooks/use-toggle-active";
 import { EmployeeStatusBadge } from "./employee-status-badge";
 import { Employee } from "../types/employees";
+import { AccountStatusModal } from "./account-status-modal";
+import { useState } from "react";
 
 interface EmployeeManagementTableProps {
   data: Employee[];
@@ -40,6 +42,23 @@ export function EmployeeManagementTable({
   const user = useAuthStore((state) => state.user);
   const { openUpdateForm, openDetail } = useEmployeeModalStore();
   const { mutate: toggleActive, isPending: isToggling } = useToggleEmployeeActive();
+
+  const [targetEmployee, setTargetEmployee] = useState<Employee | null>(null);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+
+  const handleConfirmToggle = () => {
+    if (targetEmployee) {
+      toggleActive(
+        { id: targetEmployee.id, isActive: !targetEmployee.isActive },
+        {
+          onSettled: () => {
+            setIsStatusModalOpen(false);
+            setTargetEmployee(null);
+          },
+        }
+      );
+    }
+  };
 
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-210px)] min-h-[400px]">
@@ -132,9 +151,10 @@ export function EmployeeManagementTable({
                           size="sm"
                           checked={employee.isActive}
                           disabled={isToggling || employee.status === "RESIGNED"}
-                          onCheckedChange={(checked) =>
-                            toggleActive({ id: employee.id, isActive: checked })
-                          }
+                          onCheckedChange={() => {
+                            setTargetEmployee(employee);
+                            setIsStatusModalOpen(true);
+                          }}
                           title={employee.isActive ? "Vô hiệu hóa" : "Kích hoạt"}
                         />
                       </div>
@@ -154,6 +174,20 @@ export function EmployeeManagementTable({
         itemsPerPage={itemsPerPage}
         onPageChange={onPageChange}
       />
+
+      {targetEmployee && (
+        <AccountStatusModal
+          isOpen={isStatusModalOpen}
+          onClose={() => {
+            setIsStatusModalOpen(false);
+            setTargetEmployee(null);
+          }}
+          onConfirm={handleConfirmToggle}
+          employeeName={targetEmployee.name}
+          employeeId={targetEmployee.empCode}
+          status={targetEmployee.isActive ? "active" : "inactive"}
+        />
+      )}
     </div>
   );
 }
