@@ -34,4 +34,5 @@ export const updateEmployeeSchema = createEmployeeSchema.extend({
     EmployeeStatus.WORKING,
     EmployeeStatus.RESIGNED,
   ]),
+  isActive: z.boolean().optional(),
 });

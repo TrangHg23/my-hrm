@@ -1,6 +1,7 @@
 "use client";
 
 import { Eye, Edit, Loader2 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import {
   TableBody,
   TableCell,
@@ -13,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { formatDate } from "@/utils/date";
 import { useAuthStore } from "@/features/auth/stores/auth";
 import { useEmployeeModalStore } from "../stores/employee-modal";
+import { useToggleEmployeeActive } from "../hooks/use-toggle-active";
 import { EmployeeStatusBadge } from "./employee-status-badge";
 import { Employee } from "../types/employees";
 
@@ -37,6 +39,7 @@ export function EmployeeManagementTable({
 }: EmployeeManagementTableProps) {
   const user = useAuthStore((state) => state.user);
   const { openUpdateForm, openDetail } = useEmployeeModalStore();
+  const { mutate: toggleActive, isPending: isToggling } = useToggleEmployeeActive();
 
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col overflow-hidden h-[calc(100vh-210px)] min-h-[400px]">
@@ -55,7 +58,7 @@ export function EmployeeManagementTable({
               <TableHead className="font-bold text-foreground">Ngày tạo</TableHead>
               <TableHead className="font-bold text-foreground">Trạng thái</TableHead>
               <TableHead className="font-bold text-foreground">Người tạo</TableHead>
-              <TableHead className="text-right sticky right-0 bg-muted/95 backdrop-blur-sm z-20 w-32 font-bold before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">
+              <TableHead className="text-right sticky right-0 bg-muted/95 backdrop-blur-sm z-20 w-44 font-bold before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">
                 Hành động
               </TableHead>
             </TableRow>
@@ -65,7 +68,7 @@ export function EmployeeManagementTable({
               <TableRow>
                 <TableCell colSpan={8} className="h-24 text-center">
                   <div className="flex items-center justify-center">
-                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                    < Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                   </div>
                 </TableCell>
               </TableRow>
@@ -102,26 +105,39 @@ export function EmployeeManagementTable({
                       {user?.name || "Admin"}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right sticky right-0 bg-background group-hover:bg-muted transition-colors z-10 w-30 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">
-                    <div className="flex items-center justify-end gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
-                        title="Xem chi tiết"
-                        onClick={() => openDetail(employee.id)}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
-                        title="Cập nhật"
-                        onClick={() => openUpdateForm(employee)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
+                  <TableCell className="text-right sticky right-0 bg-background group-hover:bg-muted transition-colors z-10 w-44 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-border">
+                    <div className="flex items-center justify-end gap-3">
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
+                          title="Xem chi tiết"
+                          onClick={() => openDetail(employee.id)}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors"
+                          title="Cập nhật"
+                          onClick={() => openUpdateForm(employee)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div className="flex items-center pl-2 border-l border-border/50">
+                        <Switch
+                          size="sm"
+                          checked={employee.isActive}
+                          disabled={isToggling || employee.status === "RESIGNED"}
+                          onCheckedChange={(checked) =>
+                            toggleActive({ id: employee.id, isActive: checked })
+                          }
+                          title={employee.isActive ? "Vô hiệu hóa" : "Kích hoạt"}
+                        />
+                      </div>
                     </div>
                   </TableCell>
                 </TableRow>

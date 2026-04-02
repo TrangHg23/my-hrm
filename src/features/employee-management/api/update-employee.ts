@@ -1,7 +1,7 @@
 import { api } from "@/lib/axios";
-import { Employee, CreateEmployeeFormValues } from "../types/employees";
+import { Employee, UpdateEmployeeFormValues } from "../types/employees";
 
-export const updateEmployee = async (id: string, data: Partial<CreateEmployeeFormValues>): Promise<Employee> => {
+export const updateEmployee = async (id: string, data: Partial<UpdateEmployeeFormValues>): Promise<Employee> => {
   const response = await api.patch(`/users/employees/${id}`, data);
   return response.data;
 };

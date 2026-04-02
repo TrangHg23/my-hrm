@@ -17,8 +17,14 @@ export interface Employee {
   name: string;
   phone: string | null;
   creatorId: string;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ToggleActiveParams {
+  id: string;
+  isActive: boolean;
 }
 
 export interface GetEmployeesResponse {

@@ -120,7 +120,10 @@ export function EmployeeFormModal({ onSuccess }: { onSuccess?: () => void }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onOpenChange()}>
-      <DialogContent className="sm:max-w-106.25">
+      <DialogContent
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        className="sm:max-w-106.25"
+      >
         <DialogHeader>
           <DialogTitle className="typo-h3 text-center">
             {isUpdate ? "Cập nhật nhân viên" : "Tạo tài khoản nhân viên"}
