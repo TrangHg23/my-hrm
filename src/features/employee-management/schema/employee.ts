@@ -1,4 +1,5 @@
 import z from "zod";
+import { EmployeeStatus } from "../types/employees";
 
 export const createEmployeeSchema = z.object({
   name: z
@@ -28,4 +29,10 @@ export const updateEmployeeSchema = createEmployeeSchema.extend({
     .min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự" })
     .optional()
     .or(z.literal("")),
+  status: z.enum([
+    EmployeeStatus.PROBATION,
+    EmployeeStatus.WORKING,
+    EmployeeStatus.RESIGNED,
+  ]),
+  isActive: z.boolean().optional(),
 });

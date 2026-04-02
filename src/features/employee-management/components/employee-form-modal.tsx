@@ -18,6 +18,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -31,6 +38,7 @@ import {
 import {
   CreateEmployeeFormValues,
   EmployeeFormValues,
+  EmployeeStatus,
 } from "../types/employees";
 
 import { useEmployeeModalStore } from "../stores/employee-modal";
@@ -53,6 +61,7 @@ export function EmployeeFormModal({ onSuccess }: { onSuccess?: () => void }) {
       email: "",
       password: "",
       phone: "",
+      status: EmployeeStatus.WORKING,
     },
   });
 
@@ -63,6 +72,7 @@ export function EmployeeFormModal({ onSuccess }: { onSuccess?: () => void }) {
           name: employee.name,
           email: employee.email,
           phone: employee.phone || "",
+          status: employee.status || EmployeeStatus.WORKING,
         });
       } else {
         form.reset({
@@ -70,6 +80,7 @@ export function EmployeeFormModal({ onSuccess }: { onSuccess?: () => void }) {
           email: "",
           password: "",
           phone: "",
+          status: EmployeeStatus.WORKING,
         });
       }
     }
@@ -109,7 +120,10 @@ export function EmployeeFormModal({ onSuccess }: { onSuccess?: () => void }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onOpenChange()}>
-      <DialogContent className="sm:max-w-106.25">
+      <DialogContent
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        className="sm:max-w-106.25"
+      >
         <DialogHeader>
           <DialogTitle className="typo-h3 text-center">
             {isUpdate ? "Cập nhật nhân viên" : "Tạo tài khoản nhân viên"}
@@ -204,6 +218,42 @@ export function EmployeeFormModal({ onSuccess }: { onSuccess?: () => void }) {
                 </FormItem>
               )}
             />
+
+            {isUpdate && (
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel className="typo-label-md ml-1 text-foreground/80">
+                      Trạng thái nhân viên
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Chọn trạng thái" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value={EmployeeStatus.PROBATION}>
+                          Thử việc
+                        </SelectItem>
+                        <SelectItem value={EmployeeStatus.WORKING}>
+                          Đang làm việc
+                        </SelectItem>
+                        <SelectItem value={EmployeeStatus.RESIGNED}>
+                          Đã nghỉ việc
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage className="typo-caption ml-1" />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <DialogFooter className="pt-2">
               <Button

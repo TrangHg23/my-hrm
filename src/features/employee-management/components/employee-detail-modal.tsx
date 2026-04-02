@@ -23,6 +23,7 @@ import { Separator } from "@/components/ui/separator";
 import { Typography } from "@/components/ui/typography";
 
 import { useEmployeeModalStore } from "../stores/employee-modal";
+import { EmployeeStatusBadge } from "./employee-status-badge";
 
 export function EmployeeDetailModal() {
   const { 
@@ -117,10 +118,7 @@ export function EmployeeDetailModal() {
                     <Typography variant="body-sm" className="font-semibold">{formatDate(employee.createdAt)}</Typography>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1 bg-success/10 text-success rounded-full">
-                  <div className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-                  <Typography as="span" variant="label-caps">Đang hoạt động</Typography>
-                </div>
+                <EmployeeStatusBadge status={employee.status} />
               </div>
             </div>
           ) : (

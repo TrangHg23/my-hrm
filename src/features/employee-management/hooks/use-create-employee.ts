@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createEmployee } from "../api/create-employee";
 import { toast } from "sonner";
 import { queryClient } from "@/lib/query-client";
+import { parseErrorMessage } from "@/utils/error";
 
 export const useCreateEmployee = (onSuccess?: () => void) => {
 
@@ -13,8 +14,7 @@ export const useCreateEmployee = (onSuccess?: () => void) => {
       onSuccess?.();
     },
     onError: (error: any) => {
-      const message = error.response?.data?.message || "Có lỗi xảy ra khi tạo nhân viên";
-      toast.error(message);
+      toast.error(parseErrorMessage(error));
     },
   });
 };
