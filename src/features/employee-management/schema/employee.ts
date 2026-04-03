@@ -23,7 +23,7 @@ export const createEmployeeSchema = z.object({
     .or(z.literal(""))
 });
 
-export const updateEmployeeSchema = createEmployeeSchema.extend({
+export const updateEmployeeSchema = createEmployeeSchema.omit({ email: true }).extend({
   password: z
     .string()
     .min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự" })

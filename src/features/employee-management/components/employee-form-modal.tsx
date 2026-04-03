@@ -107,8 +107,8 @@ export function EmployeeFormModal({ onSuccess }: { onSuccess?: () => void }) {
 
   const onSubmit = (values: EmployeeFormValues) => {
     if (isUpdate && employee) {
-      const { password, ...payload } = values;
-      const finalPayload = password ? values : payload;
+      const { password, email, ...payload } = values as any;
+      const finalPayload = password ? { ...payload, password } : payload;
 
       updateMutation({ id: employee.id, data: finalPayload as any });
     } else {
