@@ -13,8 +13,8 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 # --- Stage 3: Builder ---
 FROM base AS builder
 # Receive NEXT_PUBLIC_ variables as build arguments
-ARG NEXT_PUBLIC_API_URL
-ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ARG API_URL
+ENV API_URL=$API_URL
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
